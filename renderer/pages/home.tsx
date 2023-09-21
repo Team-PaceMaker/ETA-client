@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import Head from "next/head";
-import Link from "next/link";
-import Image from "next/image";
 import styles from "./home.module.css";
 import Button from "@mui/material/Button";
+import LineChart from "../components/Home/LineChart";
 
 const constraints = { audio: false, video: true };
 
@@ -41,6 +40,7 @@ function Home() {
           카메라 촬영
         </Button>
       </div>
+      <LineChart />
     </React.Fragment>
   );
 }
