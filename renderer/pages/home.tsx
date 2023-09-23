@@ -3,6 +3,7 @@ import Head from "next/head";
 import styles from "./home.module.css";
 import Button from "@mui/material/Button";
 import LineChart from "../components/Home/LineChart";
+import PieChart from "../components/Statistic/PieChart";
 
 const constraints = { audio: false, video: true };
 
@@ -40,6 +41,7 @@ function Home() {
           카메라 촬영
         </Button>
       </div>
+      <PieChart />
       <LineChart />
     </React.Fragment>
   );
