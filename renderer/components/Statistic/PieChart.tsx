@@ -42,7 +42,10 @@ const PieChart = () => {
       .append("g")
       .attr("transform", `translate(${width / 2}, ${height / 2})`);
 
-    const arcGenerator = d3.arc().innerRadius(innerRadius).outerRadius(outerRadius);
+    const arcGenerator = d3
+      .arc<d3.PieArcDatum<IData>>()
+      .innerRadius(innerRadius)
+      .outerRadius(outerRadius);
 
     const pieGenerator = d3
       .pie<IData>()
