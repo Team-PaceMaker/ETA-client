@@ -1,3 +1,22 @@
+.layout {
+  /* background-color: #69f176; */
+  background-color: #424242;
+  height: 100vh;
+}
+
+.buttonContainer {
+  background-color: #69f176;
+  display: inline-block;
+  padding: 15px;
+  border-radius: 100px;
+  font-weight: bold;
+  color: black;
+}
+
+.buttonContainer:hover {
+  cursor: pointer;
+}
+
 .video {
   width: 200px;
   height: 200px;

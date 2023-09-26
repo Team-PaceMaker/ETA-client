@@ -1,31 +1,11 @@
 import React, { useState } from "react";
-import Head from "next/head";
 import styles from "./home.module.css";
-import Button from "@mui/material/Button";
 import LineChart from "../components/Home/LineChart";
-import PieChart from "../components/Statistic/PieChart";
 
-const constraints = { audio: false, video: true };
+import Link from "next/link";
+import RootLayout from "./RootLayout";
 
 function Home() {
-  const [isVideo, setIsVideo] = useState(false);
-
-  const handleClickRecord = () => {
-    setIsVideo((prev) => !prev);
-    navigator.mediaDevices.getUserMedia(constraints).then(function (mediaStream) {
-      // 비디오 트랙을 포함한 MediaStream
-      console.log(mediaStream);
-      const videoOutput = document.getElementById("video-output");
-      if (videoOutput instanceof HTMLVideoElement) {
-        videoOutput.srcObject = mediaStream;
-        // metadata가 로드될 때 실행되는 이벤트
-        videoOutput.onloadedmetadata = function () {
-          videoOutput.play();
-        };
-      }
-    });
-  };
-
   const showNotification = () => {
     if (!("Notification" in window)) {
       alert("This browser does not support desktop notification");
@@ -52,27 +32,22 @@ function Home() {
   };
 
   return (
-    <React.Fragment>
-      <Head>
-        <title>ETA(Encourage Time for Attention)</title>
-      </Head>
-      <div>
-        {isVideo ? (
-          <video id="video-output" className={styles.video}></video>
-        ) : (
-          <div style={{ width: 200, height: 200, backgroundColor: "red" }}></div>
-        )}
-        <Button style={{ display: "block" }} onClick={handleClickRecord} variant="contained">
-          카메라 촬영
-        </Button>
-
-        <Button style={{ display: "block" }} onClick={showNotification} variant="contained">
-          푸시 알림
-        </Button>
+    <RootLayout>
+      <div style={{ color: "white" }}>
+        <div>어제 미룬 업무</div>
+        <div>ETA와 함께하자</div>
       </div>
-      <PieChart />
       <LineChart />
-    </React.Fragment>
+      <div style={{ display: "flex", justifyContent: "center" }}>
+        <Link href="/camera">
+          <div className={styles.buttonContainer}>START ETA</div>
+        </Link>
+      </div>
+
+      {/* <Button style={{ display: "block" }} onClick={showNotification} variant="contained">
+        푸시 알림
+      </Button> */}
+    </RootLayout>
   );
 }
 
