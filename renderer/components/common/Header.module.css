@@ -5,3 +5,11 @@
   color: white;
   padding: 10px;
 }
+
+.logo:hover {
+  cursor: pointer;
+}
+
+.login:hover {
+  cursor: pointer;
+}
