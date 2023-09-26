@@ -1,0 +1,15 @@
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: white;
+  padding: 10px;
+}
+
+.logo:hover {
+  cursor: pointer;
+}
+
+.login:hover {
+  cursor: pointer;
+}
