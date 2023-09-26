@@ -1,7 +1,7 @@
 import Head from "next/head";
 import React from "react";
 import Header from "../components/common/Header";
-import styles from "./home.module.css";
+import styles from "./global.module.css";
 
 const RootLayout = ({ children }) => {
   return (

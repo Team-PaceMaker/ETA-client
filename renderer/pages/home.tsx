@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import styles from "./home.module.css";
 import LineChart from "../components/Home/LineChart";
-
 import Link from "next/link";
 import RootLayout from "./RootLayout";
+import FONT from "../constants/fonts";
 
 function Home() {
   const showNotification = () => {
@@ -33,17 +33,18 @@ function Home() {
 
   return (
     <RootLayout>
-      <div style={{ color: "white" }}>
-        <div>어제 미룬 업무</div>
-        <div>ETA와 함께하자</div>
+      <div style={FONT.SLOGAN} className={styles.slogan}>
+        <div className={styles.sloganText}>어제 미룬 업무</div>
+        <div className={styles.sloganText}>ETA와 함께하자</div>
       </div>
-      <LineChart />
-      <div style={{ display: "flex", justifyContent: "center" }}>
+      <div className={styles.bodyContainer}>
+        <LineChart />
         <Link href="/camera">
-          <div className={styles.buttonContainer}>START ETA</div>
+          <div className={styles.buttonContainer} style={FONT.BODY1}>
+            START ETA
+          </div>
         </Link>
       </div>
-
       {/* <Button style={{ display: "block" }} onClick={showNotification} variant="contained">
         푸시 알림
       </Button> */}
