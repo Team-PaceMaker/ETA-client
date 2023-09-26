@@ -1,7 +1,13 @@
 .video {
-  width: 200px;
-  height: 200px;
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg); /* Safari and Chrome */
   -moz-transform: rotateY(180deg); /* Firefox */
+}
+
+.output {
+  display: block;
+  top: 4px;
+  position: relative;
+  border: dotted 1px #ccc;
+  padding: 2px;
 }
