@@ -1,13 +1,15 @@
 import Link from "next/link";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./camera.module.css";
 import RootLayout from "../RootLayout";
 
 const constraints = { audio: false, video: true };
 let scaleFactor = 0.25;
+
 const snapshots = [];
 
 const CameraGuidePage = () => {
+  const [imageSrc, setImageSrc] = useState<string>("");
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
     if (scaleFactor == null) {
       scaleFactor = 1;
@@ -15,10 +17,10 @@ const CameraGuidePage = () => {
     var w = video.videoWidth * scaleFactor;
     var h = video.videoHeight * scaleFactor;
     var canvas = document.createElement("canvas");
-    canvas.width = w / 4;
-    canvas.height = h / 4;
+    canvas.width = w;
+    canvas.height = h;
     var ctx = canvas.getContext("2d");
-    ctx.drawImage(video, 0, 0, w / 4, h / 4);
+    ctx.drawImage(video, 0, 0, w, h);
     return canvas;
   };
 
@@ -26,9 +28,11 @@ const CameraGuidePage = () => {
     const video = document.getElementById("video-output") as HTMLVideoElement;
     const output = document.getElementById("output");
     const canvas = capture(video, scaleFactor);
-    canvas.onclick = () => {
-      window.open(canvas.toDataURL());
-    };
+    // canvas.onclick = () => {
+    //   window.open(canvas.toDataURL());
+    // };
+    setImageSrc(canvas.toDataURL());
+
     snapshots.unshift(canvas);
     output.innerHTML = "";
     for (let i = 0; i < snapshots.length; i++) {
@@ -66,6 +70,7 @@ const CameraGuidePage = () => {
       <video id="video-output" width={300} height={300} className={styles.video}></video>
       <button onClick={shoot}>캡쳐하기</button>
       <div id="output" className={styles.output}></div>
+      <img src={imageSrc} width={100} height={100}></img>
     </RootLayout>
   );
 };
