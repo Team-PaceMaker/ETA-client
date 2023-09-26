@@ -20,6 +20,8 @@ const CameraGuidePage = () => {
     canvas.width = w;
     canvas.height = h;
     var ctx = canvas.getContext("2d");
+    ctx.scale(-1, 1);
+    ctx.translate(-w, 0);
     ctx.drawImage(video, 0, 0, w, h);
     return canvas;
   };
@@ -28,9 +30,6 @@ const CameraGuidePage = () => {
     const video = document.getElementById("video-output") as HTMLVideoElement;
     const output = document.getElementById("output");
     const canvas = capture(video, scaleFactor);
-    // canvas.onclick = () => {
-    //   window.open(canvas.toDataURL());
-    // };
     setImageSrc(canvas.toDataURL());
 
     snapshots.unshift(canvas);
@@ -70,7 +69,7 @@ const CameraGuidePage = () => {
       <video id="video-output" width={300} height={300} className={styles.video}></video>
       <button onClick={shoot}>캡쳐하기</button>
       <div id="output" className={styles.output}></div>
-      <img src={imageSrc} width={100} height={100}></img>
+      <img src={imageSrc} width={160} height={120}></img>
     </RootLayout>
   );
 };
