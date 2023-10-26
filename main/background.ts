@@ -1,4 +1,4 @@
-import { app, Notification } from "electron";
+import { app, Menu, nativeImage, Notification, Tray } from "electron";
 import serve from "electron-serve";
 import { createWindow } from "./helpers";
 
@@ -11,7 +11,30 @@ if (isProd) {
 }
 
 (async () => {
-  await app.whenReady().then(makeWindow).then(showNotification);
+  // await app.whenReady().then(makeWindow).then(showNotification);
+  const dockMenu = Menu.buildFromTemplate([
+    {
+      label: "New Window",
+      click() {
+        console.log("New Window");
+      },
+    },
+    {
+      label: "New Window with Settings",
+      submenu: [{ label: "Basic" }, { label: "Pro" }],
+    },
+    { label: "New Command..." },
+  ]);
+
+  await app
+    .whenReady()
+    .then(() => {
+      if (process.platform === "darwin") {
+        app.dock.setMenu(dockMenu);
+      }
+    })
+    .then(makeWindow)
+    .then(showNotification);
 
   async function makeWindow() {
     const mainWindow = createWindow("main", {
@@ -20,12 +43,37 @@ if (isProd) {
     });
 
     if (isProd) {
+      app.commandLine.appendSwitch("ignore-certificate-errors"); // SSL 인증서 오류 무시 (개발용)
+      app.commandLine.appendSwitch("allow-insecure-localhost"); // 로컬호스트에 대한 비보안 연결 허용 (개발용)
       await mainWindow.loadURL("app://./home.html");
     } else {
       const port = process.argv[2];
       await mainWindow.loadURL(`http://localhost:${port}/home`);
-      // mainWindow.webContents.openDevTools();
+      mainWindow.webContents.openDevTools();
     }
+
+    // windows
+    // const iconPath = `${__dirname}/logo.png`;
+    // const tray = new Tray(nativeImage.createFromPath(iconPath));
+    // tray.setToolTip("ETA");
+    // const contextMenu = Menu.buildFromTemplate([
+    //   {
+    //     label: "열기",
+    //     type: "normal",
+    //     click() {
+    //       mainWindow.show();
+    //     },
+    //   },
+    //   { label: "닫기", type: "normal", role: "quit" },
+    // ]);
+    // tray.on("click", () => (mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()));
+    // tray.setContextMenu(contextMenu);
+    // mainWindow.on("close", (e) => {
+    //   if (mainWindow.isVisible()) {
+    //     mainWindow.hide();
+    //     e.preventDefault();
+    //   }
+    // });
   }
 })();
 
