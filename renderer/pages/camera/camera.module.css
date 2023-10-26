@@ -1,3 +1,9 @@
+.cameraBodyContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 .video {
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg); /* Safari and Chrome */
@@ -10,4 +16,17 @@
   position: relative;
   border: dotted 1px #ccc;
   padding: 2px;
+}
+
+.buttonContainer {
+  background-color: var(--color-green);
+  display: inline-block;
+  padding: 15px;
+  border-radius: 100px;
+  font-weight: bold;
+  color: var(--color-black);
+}
+
+.buttonContainer:hover {
+  cursor: pointer;
 }

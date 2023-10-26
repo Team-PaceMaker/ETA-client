@@ -2,14 +2,22 @@ import Link from "next/link";
 import React, { useEffect, useState } from "react";
 import styles from "./camera.module.css";
 import RootLayout from "../RootLayout";
+import useInterval from "../../hooks/useInterval";
+import FONT from "../../constants/fonts";
+import { sendCaptureImage } from "../../apis/camera";
 
 const constraints = { audio: false, video: true };
-let scaleFactor = 0.25;
+const VIDEO_WIDTH = 500;
+const VIDEO_HEIGHT = 500;
+const CAPTURE_DELAY = 1000;
+const IMAGE_WIDTH = 224;
+const IMAGE_HEIGHT = 224;
 
-const snapshots = [];
+const BUTTON_TEXT = "VIDEO START";
+let scaleFactor = 0.25;
+let videoStream: MediaStream;
 
 const CameraGuidePage = () => {
-  const [imageSrc, setImageSrc] = useState<string>("");
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
     if (scaleFactor == null) {
       scaleFactor = 1;
@@ -23,29 +31,32 @@ const CameraGuidePage = () => {
     ctx.scale(-1, 1);
     ctx.translate(-w, 0);
     ctx.drawImage(video, 0, 0, w, h);
+
     return canvas;
   };
 
-  const shoot = () => {
+  const captureImage = () => {
     const video = document.getElementById("video-output") as HTMLVideoElement;
     const output = document.getElementById("output");
     const canvas = capture(video, scaleFactor);
-    setImageSrc(canvas.toDataURL());
+    if (canvas.width === 0) return;
+    const imageSrc = canvas.toDataURL("image/jpeg", 0.8); // 2번째 인자를 0~1 까지 주면서 화질 조절. 1이 best
 
-    snapshots.unshift(canvas);
-    output.innerHTML = "";
-    for (let i = 0; i < snapshots.length; i++) {
-      output.appendChild(snapshots[i]);
-    }
+    // Base64 문자열을 Blob으로 변환
+    const blob = dataURLtoBlob(imageSrc);
+
+    // Blob 데이터를 FormData에 담아 송신
+    const formData = new FormData();
+    formData.append("file", blob, "test.jpeg");
+    sendCaptureImage(formData);
   };
 
-  const handleClickRecord = () => {
+  const showCameraGuide = () => {
     navigator.mediaDevices.getUserMedia(constraints).then(function (mediaStream) {
-      // 비디오 트랙을 포함한 MediaStream
-      console.log(mediaStream);
       const videoOutput = document.getElementById("video-output");
       if (videoOutput instanceof HTMLVideoElement) {
         videoOutput.srcObject = mediaStream;
+        videoStream = mediaStream;
         // metadata가 로드될 때 실행되는 이벤트
         videoOutput.onloadedmetadata = function () {
           videoOutput.play();
@@ -54,24 +65,61 @@ const CameraGuidePage = () => {
     });
   };
 
+  function stopVideoStream() {
+    const videoOutput = document.getElementById("video-output");
+    if (videoOutput instanceof HTMLVideoElement) {
+      const tracks = videoStream.getTracks(); // 스트림의 모든 트랙 가져오기
+      tracks.forEach(function (track) {
+        track.stop(); // 트랙 종료
+      });
+    }
+  }
+
+  // 일정간격마다 비디오 캡처
+  // useInterval(() => {
+  //   captureImage();
+  // }, CAPTURE_DELAY);
+
   useEffect(() => {
     if ("navigator" in window) {
-      handleClickRecord();
+      showCameraGuide();
     }
+    return () => stopVideoStream();
   }, []);
 
   return (
     <RootLayout>
-      CameraGuidePage
-      <Link href="/home">
-        <a>Go to home page</a>
-      </Link>
-      <video id="video-output" width={300} height={300} className={styles.video}></video>
-      <button onClick={shoot}>캡쳐하기</button>
-      <div id="output" className={styles.output}></div>
-      <img src={imageSrc} width={160} height={120}></img>
+      <div className={styles.cameraBodyContainer}>
+        <video
+          id="video-output"
+          width={VIDEO_WIDTH}
+          height={VIDEO_HEIGHT}
+          className={styles.video}
+        ></video>
+        <Link href="/video">
+          <div className={styles.buttonContainer} style={FONT.BODY1}>
+            {BUTTON_TEXT}
+          </div>
+        </Link>
+      </div>
+
+      {/* <button onClick={captureImage}>캡쳐하기</button> */}
+      {/* <div id="output" className={styles.output}></div> */}
+      {/* <img src={imageSrc} width={IMAGE_WIDTH} height={IMAGE_HEIGHT}></img> */}
     </RootLayout>
   );
 };
+
+// Base64 문자열을 Blob으로 변환하는 함수
+function dataURLtoBlob(dataURL: string) {
+  const byteString = atob(dataURL.split(",")[1]);
+  const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mimeString });
+}
 
 export default CameraGuidePage;
