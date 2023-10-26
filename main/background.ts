@@ -1,5 +1,6 @@
 import { app, Menu, nativeImage, Notification, Tray } from "electron";
 import serve from "electron-serve";
+import { config } from "./config";
 import { createWindow } from "./helpers";
 
 const isProd: boolean = process.env.NODE_ENV === "production";
@@ -29,6 +30,7 @@ if (isProd) {
   await app
     .whenReady()
     .then(() => {
+      process.env.SERVER_URL = config.SERVER_URL;
       if (process.platform === "darwin") {
         app.dock.setMenu(dockMenu);
       }
