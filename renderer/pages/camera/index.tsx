@@ -7,6 +7,7 @@ import useInterval from "../../hooks/useInterval";
 const constraints = { audio: false, video: true };
 const VIDEO_WIDTH = 300;
 const VIDEO_HEIGHT = 300;
+const CAPTURE_DELAY = 1000;
 
 let scaleFactor = 0.25;
 
@@ -58,6 +59,23 @@ const CameraGuidePage = () => {
       }
     });
   };
+
+  // const stopStreamedVideo = (videoElem: HTMLVideoElement) => {
+  //   const stream: MediaStream = videoElem.srcObject;
+
+  //   const tracks = stream.getTracks();
+
+  //   tracks.forEach(function (track) {
+  //     track.stop();
+  //   });
+
+  //   videoElem.srcObject = null;
+  // };
+
+  // 일정간격마다 비디오 캡처
+  useInterval(() => {
+    captureImage();
+  }, CAPTURE_DELAY);
 
   useEffect(() => {
     if ("navigator" in window) {
