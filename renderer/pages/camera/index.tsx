@@ -4,6 +4,7 @@ import styles from "./camera.module.css";
 import RootLayout from "../RootLayout";
 import useInterval from "../../hooks/useInterval";
 import FONT from "../../constants/fonts";
+import { sendCaptureImage } from "../../apis/camera";
 
 const constraints = { audio: false, video: true };
 const VIDEO_WIDTH = 500;
@@ -40,8 +41,14 @@ const CameraGuidePage = () => {
     const canvas = capture(video, scaleFactor);
     if (canvas.width === 0) return;
     const imageSrc = canvas.toDataURL("image/jpeg", 0.8); // 2번째 인자를 0~1 까지 주면서 화질 조절. 1이 best
-    // TODO: 이미지 서버에 전송
-    // sendImage(imageSrc);
+
+    // Base64 문자열을 Blob으로 변환
+    const blob = dataURLtoBlob(imageSrc);
+
+    // Blob 데이터를 FormData에 담아 송신
+    const formData = new FormData();
+    formData.append("file", blob, "test.jpeg");
+    sendCaptureImage(formData);
   };
 
   const showCameraGuide = () => {
@@ -102,5 +109,17 @@ const CameraGuidePage = () => {
     </RootLayout>
   );
 };
+
+// Base64 문자열을 Blob으로 변환하는 함수
+function dataURLtoBlob(dataURL: string) {
+  const byteString = atob(dataURL.split(",")[1]);
+  const mimeString = dataURL.split(",")[0].split(":")[1].split(";")[0];
+  const ab = new ArrayBuffer(byteString.length);
+  const ia = new Uint8Array(ab);
+  for (let i = 0; i < byteString.length; i++) {
+    ia[i] = byteString.charCodeAt(i);
+  }
+  return new Blob([ab], { type: mimeString });
+}
 
 export default CameraGuidePage;
