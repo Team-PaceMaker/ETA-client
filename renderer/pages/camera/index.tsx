@@ -14,8 +14,7 @@ const IMAGE_HEIGHT = 224;
 
 const BUTTON_TEXT = "VIDEO START";
 let scaleFactor = 0.25;
-
-const snapshots = [];
+let videoStream: MediaStream;
 
 const CameraGuidePage = () => {
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
@@ -45,11 +44,12 @@ const CameraGuidePage = () => {
     // sendImage(imageSrc);
   };
 
-  const handleClickRecord = () => {
+  const showCameraGuide = () => {
     navigator.mediaDevices.getUserMedia(constraints).then(function (mediaStream) {
       const videoOutput = document.getElementById("video-output");
       if (videoOutput instanceof HTMLVideoElement) {
         videoOutput.srcObject = mediaStream;
+        videoStream = mediaStream;
         // metadata가 로드될 때 실행되는 이벤트
         videoOutput.onloadedmetadata = function () {
           videoOutput.play();
@@ -58,17 +58,15 @@ const CameraGuidePage = () => {
     });
   };
 
-  // const stopStreamedVideo = (videoElem: HTMLVideoElement) => {
-  //   const stream: MediaStream = videoElem.srcObject;
-
-  //   const tracks = stream.getTracks();
-
-  //   tracks.forEach(function (track) {
-  //     track.stop();
-  //   });
-
-  //   videoElem.srcObject = null;
-  // };
+  function stopVideoStream() {
+    const videoOutput = document.getElementById("video-output");
+    if (videoOutput instanceof HTMLVideoElement) {
+      const tracks = videoStream.getTracks(); // 스트림의 모든 트랙 가져오기
+      tracks.forEach(function (track) {
+        track.stop(); // 트랙 종료
+      });
+    }
+  }
 
   // 일정간격마다 비디오 캡처
   // useInterval(() => {
@@ -77,14 +75,9 @@ const CameraGuidePage = () => {
 
   useEffect(() => {
     if ("navigator" in window) {
-      handleClickRecord();
+      showCameraGuide();
     }
-    return () => {
-      const videoOutput = document.getElementById("video-output");
-      if (videoOutput instanceof HTMLVideoElement) {
-        videoOutput.pause();
-      }
-    };
+    return () => stopVideoStream();
   }, []);
 
   return (
