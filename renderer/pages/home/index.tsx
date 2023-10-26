@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import styles from "./home.module.css";
-import LineChart from "../components/Home/LineChart";
+import LineChart from "../../components/Home/LineChart";
 import Link from "next/link";
-import RootLayout from "./RootLayout";
-import FONT from "../constants/fonts";
+import RootLayout from "../RootLayout";
+import FONT from "../../constants/fonts";
 
 function Home() {
   const showNotification = () => {
