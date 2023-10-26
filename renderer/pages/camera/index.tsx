@@ -1,15 +1,18 @@
 import Link from "next/link";
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import styles from "./camera.module.css";
 import RootLayout from "../RootLayout";
+import useInterval from "../../hooks/useInterval";
 
 const constraints = { audio: false, video: true };
+const VIDEO_WIDTH = 300;
+const VIDEO_HEIGHT = 300;
+
 let scaleFactor = 0.25;
 
 const snapshots = [];
 
 const CameraGuidePage = () => {
-  const [imageSrc, setImageSrc] = useState<string>("");
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
     if (scaleFactor == null) {
       scaleFactor = 1;
@@ -23,14 +26,18 @@ const CameraGuidePage = () => {
     ctx.scale(-1, 1);
     ctx.translate(-w, 0);
     ctx.drawImage(video, 0, 0, w, h);
+
     return canvas;
   };
 
-  const shoot = () => {
+  const captureImage = () => {
     const video = document.getElementById("video-output") as HTMLVideoElement;
     const output = document.getElementById("output");
     const canvas = capture(video, scaleFactor);
-    setImageSrc(canvas.toDataURL());
+    if (canvas.width === 0) return;
+    const imageSrc = canvas.toDataURL("image/jpeg", 1); // 2번째 인자를 0~1 까지 주면서 화질 조절. 1이 best
+    // TODO: 이미지 서버에 전송
+    // sendImage(imageSrc);
 
     snapshots.unshift(canvas);
     output.innerHTML = "";
@@ -41,8 +48,6 @@ const CameraGuidePage = () => {
 
   const handleClickRecord = () => {
     navigator.mediaDevices.getUserMedia(constraints).then(function (mediaStream) {
-      // 비디오 트랙을 포함한 MediaStream
-      console.log(mediaStream);
       const videoOutput = document.getElementById("video-output");
       if (videoOutput instanceof HTMLVideoElement) {
         videoOutput.srcObject = mediaStream;
@@ -58,18 +63,25 @@ const CameraGuidePage = () => {
     if ("navigator" in window) {
       handleClickRecord();
     }
+    return () => {
+      const videoOutput = document.getElementById("video-output");
+      if (videoOutput instanceof HTMLVideoElement) {
+        videoOutput.pause();
+      }
+    };
   }, []);
 
   return (
     <RootLayout>
-      CameraGuidePage
-      <Link href="/home">
-        <a>Go to home page</a>
-      </Link>
-      <video id="video-output" width={300} height={300} className={styles.video}></video>
-      <button onClick={shoot}>캡쳐하기</button>
+      <video
+        id="video-output"
+        width={VIDEO_WIDTH}
+        height={VIDEO_HEIGHT}
+        className={styles.video}
+      ></video>
+      <button onClick={captureImage}>캡쳐하기</button>
       <div id="output" className={styles.output}></div>
-      <img src={imageSrc} width={160} height={120}></img>
+      {/* <img src={imageSrc} width={IMAGE_WIDTH} height={IMAGE_HEIGHT}></img> */}
     </RootLayout>
   );
 };

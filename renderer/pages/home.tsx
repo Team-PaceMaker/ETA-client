@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./home.module.css";
 import LineChart from "../components/Home/LineChart";
 import Link from "next/link";
@@ -11,14 +11,14 @@ function Home() {
       alert("This browser does not support desktop notification");
     } else if (Notification.permission === "granted") {
       // TODO: 집중상태를 값으로 받아서 값에 따라 푸시알림 보내기
-      const notificationTitle = "현재 집중상태 : 🔥";
-      new Notification(notificationTitle, {
-        body: "오~쫌치는데? 아자아자!",
-      }).onclick = () => console.log("Notification Clicked");
-      // const notificationTitle = "현재 집중상태 : 🫵";
+      // const notificationTitle = "현재 집중상태 : 🔥";
       // new Notification(notificationTitle, {
-      //   body: "엥 지금 집중안하고 뭐함?",
+      //   body: "열심히 하고계시네요! 아자아자!",
       // }).onclick = () => console.log("Notification Clicked");
+      const notificationTitle = "현재 집중상태 : 🫵";
+      new Notification(notificationTitle, {
+        body: "바람한번 쐬고오는 건 어떨까요?",
+      }).onclick = () => console.log("Notification Clicked");
     } else if (Notification.permission !== "denied") {
       Notification.requestPermission((permission) => {
         console.log(permission);
@@ -34,7 +34,9 @@ function Home() {
   return (
     <RootLayout>
       <div style={FONT.SLOGAN} className={styles.slogan}>
-        <div className={styles.sloganText}>어제 미룬 업무</div>
+        <div id="slogan" className={styles.sloganText}>
+          어제 미룬 업무
+        </div>
         <div className={styles.sloganText}>ETA와 함께하자</div>
       </div>
       <div className={styles.bodyContainer}>
@@ -45,9 +47,9 @@ function Home() {
           </div>
         </Link>
       </div>
-      {/* <Button style={{ display: "block" }} onClick={showNotification} variant="contained">
+      {/* <button style={{ display: "block" }} onClick={showNotification}>
         푸시 알림
-      </Button> */}
+      </button> */}
     </RootLayout>
   );
 }
