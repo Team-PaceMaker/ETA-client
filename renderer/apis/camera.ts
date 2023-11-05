@@ -1,10 +1,10 @@
-import { formDataServer } from "./settings";
+import { formDataServer } from './settings';
 
-export const sendCaptureImage = async (formData: FormData) => {
+export const getAttentionStatus = async (formData: FormData) => {
   try {
-    await formDataServer.post(
-      "uploadFile",
-      { file: formData },
+    const result = await formDataServer.post(
+      'api/v1/eta/attention',
+      { image: formData },
       {
         transformRequest: [
           function () {
@@ -13,7 +13,8 @@ export const sendCaptureImage = async (formData: FormData) => {
         ],
       }
     );
+    return result.data.prediction;
   } catch (error) {
-    console.log("[AXIOS ERROR] ", error);
+    console.log('[AXIOS ERROR] ', error);
   }
 };

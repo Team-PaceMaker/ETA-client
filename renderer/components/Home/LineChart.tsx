@@ -1,5 +1,6 @@
-import React, { useEffect, useRef } from "react";
-import * as d3 from "d3";
+import React, { useEffect, useRef } from 'react';
+import * as d3 from 'd3';
+import COLOR from '../../constants/colors';
 
 interface ILineData {
   date: any;
@@ -7,12 +8,12 @@ interface ILineData {
 }
 
 const dummyData = [
-  { date: "2023-09-18", value: 5 },
-  { date: "2023-09-19", value: 3 },
-  { date: "2023-09-20", value: 4 },
-  { date: "2023-09-21", value: 8 },
-  { date: "2023-09-22", value: 6 },
-  { date: "2023-09-23", value: 3 },
+  { date: '2023-09-18', value: 5 },
+  { date: '2023-09-19', value: 3 },
+  { date: '2023-09-20', value: 4 },
+  { date: '2023-09-21', value: 8 },
+  { date: '2023-09-22', value: 6 },
+  { date: '2023-09-23', value: 3 },
 ];
 
 const LineChart = () => {
@@ -22,7 +23,7 @@ const LineChart = () => {
     drawChart(divRef);
   }, [divRef]);
 
-  return <div ref={divRef}></div>;
+  return <div id='line-container' ref={divRef}></div>;
 };
 
 function drawChart(divRef: React.RefObject<HTMLDivElement>) {
@@ -30,16 +31,17 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
     width = 460 - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
+  d3.select('#line-container').select('svg').remove();
+
   const svg = d3
     .select(divRef.current)
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-  // svg.append("circle").attr("r", 10).attr("cx", 10).attr("cy", 10).attr("fill", "red");
+    .append('svg')
+    .attr('width', width + margin.left + margin.right)
+    .attr('height', height + margin.top + margin.bottom)
+    .append('g')
+    .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-  const parseDate: any = d3.timeParse("%Y-%m-%d");
+  const parseDate: any = d3.timeParse('%Y-%m-%d');
   const data = dummyData.map(({ date, value }) => ({
     date: parseDate(date),
     value,
@@ -54,19 +56,24 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
   const y = d3.scaleLinear().domain([0, yMax]).range([height, 0]);
 
   svg
-    .append("g")
-    .attr("transform", "translate(0," + height + ")")
+    .append('g')
+    .attr('transform', 'translate(0,' + height + ')')
     .call(d3.axisBottom(x));
-  svg.append("g").call(d3.axisLeft(y));
+  svg.append('g').call(d3.axisLeft(y));
 
   svg
-    .append("path")
+    .append('path')
     .datum(data)
-    .attr("fill", "none")
-    .attr("stroke", "steelblue")
-    .attr("stroke-width", 3)
+    .attr('fill', 'none')
+    .attr('stroke', COLOR.GREEN)
+    .attr('stroke-width', 3)
+    .on('click', function () {
+      d3.select(this).transition();
+      // .duration(2000)
+      // .attr("transform", "translate(0," + height + ")");
+    })
     .attr(
-      "d",
+      'd',
       d3
         .line<ILineData>()
         .x((value) => x(value.date))

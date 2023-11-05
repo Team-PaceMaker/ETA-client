@@ -6,8 +6,9 @@ const videoPage = () => {
   return (
     <RootLayout>
       <Link href="/camera">
-        <div>asd</div>
+        <div>이전 페이지</div>
       </Link>
+      <div>오늘의 집중 상태</div>
     </RootLayout>
   );
 };
