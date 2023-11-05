@@ -4,7 +4,7 @@ import styles from './camera.module.css';
 import RootLayout from '../RootLayout';
 import useInterval from '../../hooks/useInterval';
 import FONT from '../../constants/fonts';
-import { sendCaptureImage } from '../../apis/camera';
+import { getAttentionStatus } from '../../apis/camera';
 
 const constraints = { audio: false, video: true };
 const VIDEO_WIDTH = 500;
@@ -48,7 +48,7 @@ const CameraGuidePage = () => {
     // Blob 데이터를 FormData에 담아 송신
     const formData = new FormData();
     formData.append('image', blob, 'test.jpeg');
-    sendCaptureImage(formData);
+    getAttentionStatus(formData);
   };
 
   const showCameraGuide = () => {
