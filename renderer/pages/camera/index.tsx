@@ -9,7 +9,7 @@ import { getAttentionStatus } from '../../apis/camera';
 const constraints = { audio: false, video: true };
 const VIDEO_WIDTH = 600;
 const VIDEO_HEIGHT = 500;
-const CAPTURE_DELAY = 1000;
+const CAPTURE_DELAY = 2000;
 const IMAGE_WIDTH = 224;
 const IMAGE_HEIGHT = 224;
 
@@ -19,6 +19,7 @@ let scaleFactor = 0.25;
 let videoStream: MediaStream;
 
 const CameraGuidePage = () => {
+  const [isAttention, setIsAttention] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
@@ -38,7 +39,7 @@ const CameraGuidePage = () => {
     return canvas;
   };
 
-  const captureImage = () => {
+  const captureImage = async () => {
     const video = document.getElementById('video-output') as HTMLVideoElement;
     // const output = document.getElementById('output');
     const canvas = capture(video, scaleFactor);
@@ -51,7 +52,9 @@ const CameraGuidePage = () => {
     // Blob 데이터를 FormData에 담아 송신
     const formData = new FormData();
     formData.append('image', blob, 'test.jpeg');
-    getAttentionStatus(formData);
+    const attention = await getAttentionStatus(formData);
+    if (attention) setIsAttention(true);
+    else setIsAttention(false);
   };
 
   const showCameraGuide = () => {
@@ -85,9 +88,9 @@ const CameraGuidePage = () => {
   // }
 
   // 일정간격마다 비디오 캡처
-  // useInterval(() => {
-  //   captureImage();
-  // }, CAPTURE_DELAY);
+  useInterval(() => {
+    captureImage();
+  }, CAPTURE_DELAY);
 
   useEffect(() => {
     if ('navigator' in window) {
@@ -104,7 +107,7 @@ const CameraGuidePage = () => {
         <div className={styles.videoText} style={FONT.BODY1}>
           {VIDEO_TEXT}
         </div>
-
+        <div className={styles.attentionStatus}>{isAttention ? '🥴' : '🫵'}</div>
         <Link href='/video'>
           <div className={styles.buttonContainer} style={FONT.BODY1}>
             {BUTTON_TEXT}
