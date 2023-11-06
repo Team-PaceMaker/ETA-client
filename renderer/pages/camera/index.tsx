@@ -1,10 +1,10 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import styles from './camera.module.css';
 import RootLayout from '../RootLayout';
 import useInterval from '../../hooks/useInterval';
 import FONT from '../../constants/fonts';
 import { getAttentionStatus } from '../../apis/camera';
+import CameraGuide from '../../components/camera/CameraGuide';
 
 const constraints = { audio: false, video: true };
 const VIDEO_WIDTH = 600;
@@ -100,24 +100,7 @@ const CameraGuidePage = () => {
 
   return (
     <RootLayout>
-      <div className={styles.cameraBodyContainer}>
-        <video id='video-output' width={VIDEO_WIDTH} className={styles.video} />
-        {!isVideoLoaded && <div className={styles.loadingBlock} />}
-
-        <div className={styles.videoText} style={FONT.BODY1}>
-          {VIDEO_TEXT}
-        </div>
-        <div className={styles.attentionStatus}>{isAttention ? '🥴' : '🫵'}</div>
-        <Link href='/video'>
-          <div className={styles.buttonContainer} style={FONT.BODY1}>
-            {BUTTON_TEXT}
-          </div>
-        </Link>
-      </div>
-
-      {/* <button onClick={captureImage}>캡쳐하기</button> */}
-      {/* <div id="output" className={styles.output}></div> */}
-      {/* <img src={imageSrc} width={IMAGE_WIDTH} height={IMAGE_HEIGHT}></img> */}
+      <CameraGuide isVideoLoaded={isVideoLoaded} />
     </RootLayout>
   );
 };
