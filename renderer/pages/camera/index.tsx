@@ -6,6 +6,7 @@ import FONT from '../../constants/fonts';
 import { getAttentionStatus } from '../../apis/camera';
 import CameraGuide from '../../components/camera/CameraGuide';
 import AttentionStatus from '../../components/camera/AttentionStatus';
+import { showNotification } from '../../utils/notification';
 
 const constraints = { audio: false, video: true };
 const CAPTURE_DELAY = 2000;
@@ -57,6 +58,9 @@ const CameraGuidePage = () => {
     const attention = await getAttentionStatus(formData);
     if (attention) setIsAttention(true);
     else setIsAttention(false);
+
+    // TODO: 집중상태에 따라 푸시알림. 즉각적으로 주는 게 아닌 일정 간격마다 푸시알림.
+    // showNotification(attention);
   };
 
   const showCameraGuide = () => {
