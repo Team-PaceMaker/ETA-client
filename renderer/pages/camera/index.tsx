@@ -1,23 +1,30 @@
 import Link from 'next/link';
 import React, { useEffect, useState } from 'react';
-import styles from './camera.module.css';
 import RootLayout from '../RootLayout';
 import useInterval from '../../hooks/useInterval';
 import FONT from '../../constants/fonts';
 import { getAttentionStatus } from '../../apis/camera';
+import CameraGuide from '../../components/camera/CameraGuide';
+import AttentionStatus from '../../components/camera/AttentionStatus';
+import { showNotification } from '../../utils/notification';
 
 const constraints = { audio: false, video: true };
-const VIDEO_WIDTH = 500;
-const VIDEO_HEIGHT = 500;
-const CAPTURE_DELAY = 1000;
+const CAPTURE_DELAY = 2000;
 const IMAGE_WIDTH = 224;
 const IMAGE_HEIGHT = 224;
 
-const BUTTON_TEXT = 'VIDEO START';
 let scaleFactor = 0.25;
 let videoStream: MediaStream;
 
 const CameraGuidePage = () => {
+  const [isStartRecord, setIsStartRecord] = useState(false);
+  const [isAttention, setIsAttention] = useState(false);
+  const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+
+  const handleStartRecord = () => {
+    setIsStartRecord(true);
+  };
+
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
     if (scaleFactor == null) {
       scaleFactor = 1;
@@ -35,9 +42,9 @@ const CameraGuidePage = () => {
     return canvas;
   };
 
-  const captureImage = () => {
+  const captureImage = async () => {
     const video = document.getElementById('video-output') as HTMLVideoElement;
-    const output = document.getElementById('output');
+    // const output = document.getElementById('output');
     const canvas = capture(video, scaleFactor);
     if (canvas.width === 0) return;
     const imageSrc = canvas.toDataURL('image/jpeg', 0.8); // 2번째 인자를 0~1 까지 주면서 화질 조절. 1이 best
@@ -48,7 +55,12 @@ const CameraGuidePage = () => {
     // Blob 데이터를 FormData에 담아 송신
     const formData = new FormData();
     formData.append('image', blob, 'test.jpeg');
-    getAttentionStatus(formData);
+    const attention = await getAttentionStatus(formData);
+    if (attention) setIsAttention(true);
+    else setIsAttention(false);
+
+    // TODO: 집중상태에 따라 푸시알림. 즉각적으로 주는 게 아닌 일정 간격마다 푸시알림.
+    // showNotification(attention);
   };
 
   const showCameraGuide = () => {
@@ -57,15 +69,17 @@ const CameraGuidePage = () => {
       if (videoOutput instanceof HTMLVideoElement) {
         videoOutput.srcObject = mediaStream;
         videoStream = mediaStream;
+
         // metadata가 로드될 때 실행되는 이벤트
         videoOutput.onloadedmetadata = function () {
           videoOutput.play();
+          setIsVideoLoaded(true);
         };
       }
     });
   };
 
-  function stopVideoStream() {
+  const stopVideoStream = () => {
     const videoOutput = document.getElementById('video-output');
     if (videoOutput instanceof HTMLVideoElement) {
       const tracks = videoStream.getTracks(); // 스트림의 모든 트랙 가져오기
@@ -73,12 +87,12 @@ const CameraGuidePage = () => {
         track.stop(); // 트랙 종료
       });
     }
-  }
+  };
 
   // 일정간격마다 비디오 캡처
-  // useInterval(() => {
-  //   captureImage();
-  // }, CAPTURE_DELAY);
+  useInterval(() => {
+    captureImage();
+  }, CAPTURE_DELAY);
 
   useEffect(() => {
     if ('navigator' in window) {
@@ -89,23 +103,12 @@ const CameraGuidePage = () => {
 
   return (
     <RootLayout>
-      <div className={styles.cameraBodyContainer}>
-        <video
-          id='video-output'
-          width={VIDEO_WIDTH}
-          height={VIDEO_HEIGHT}
-          className={styles.video}
-        ></video>
-        <Link href='/video'>
-          <div className={styles.buttonContainer} style={FONT.BODY1}>
-            {BUTTON_TEXT}
-          </div>
-        </Link>
-      </div>
-
-      {/* <button onClick={captureImage}>캡쳐하기</button> */}
-      {/* <div id="output" className={styles.output}></div> */}
-      {/* <img src={imageSrc} width={IMAGE_WIDTH} height={IMAGE_HEIGHT}></img> */}
+      {isStartRecord && <AttentionStatus isAttention={isAttention} />}
+      <CameraGuide
+        isVideoLoaded={isVideoLoaded}
+        isStartRecord={isStartRecord}
+        handleStartRecord={handleStartRecord}
+      />
     </RootLayout>
   );
 };

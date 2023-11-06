@@ -13,6 +13,7 @@ export const getAttentionStatus = async (formData: FormData) => {
         ],
       }
     );
+    console.log(result.data.prediction);
     return result.data.prediction;
   } catch (error) {
     console.log('[AXIOS ERROR] ', error);
