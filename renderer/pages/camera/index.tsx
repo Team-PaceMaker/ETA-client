@@ -5,22 +5,24 @@ import useInterval from '../../hooks/useInterval';
 import FONT from '../../constants/fonts';
 import { getAttentionStatus } from '../../apis/camera';
 import CameraGuide from '../../components/camera/CameraGuide';
+import AttentionStatus from '../../components/camera/AttentionStatus';
 
 const constraints = { audio: false, video: true };
-const VIDEO_WIDTH = 600;
-const VIDEO_HEIGHT = 500;
 const CAPTURE_DELAY = 2000;
 const IMAGE_WIDTH = 224;
 const IMAGE_HEIGHT = 224;
 
-const BUTTON_TEXT = 'VIDEO START';
-const VIDEO_TEXT = '보이는 점선에 맞춰 촬영해주세요';
 let scaleFactor = 0.25;
 let videoStream: MediaStream;
 
 const CameraGuidePage = () => {
+  const [isStartRecord, setIsStartRecord] = useState(false);
   const [isAttention, setIsAttention] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+
+  const handleStartRecord = () => {
+    setIsStartRecord(true);
+  };
 
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
     if (scaleFactor == null) {
@@ -63,29 +65,25 @@ const CameraGuidePage = () => {
       if (videoOutput instanceof HTMLVideoElement) {
         videoOutput.srcObject = mediaStream;
         videoStream = mediaStream;
-        const handlePlayVideo = () => {
+
+        // metadata가 로드될 때 실행되는 이벤트
+        videoOutput.onloadedmetadata = function () {
           videoOutput.play();
           setIsVideoLoaded(true);
         };
-        videoOutput.addEventListener('loadeddata', handlePlayVideo);
-
-        // // metadata가 로드될 때 실행되는 이벤트
-        // videoOutput.onloadedmetadata = function () {
-        //   videoOutput.play();
-        // };
       }
     });
   };
 
-  // function stopVideoStream() {
-  //   const videoOutput = document.getElementById('video-output');
-  //   if (videoOutput instanceof HTMLVideoElement) {
-  //     const tracks = videoStream.getTracks(); // 스트림의 모든 트랙 가져오기
-  //     tracks.forEach(function (track) {
-  //       track.stop(); // 트랙 종료
-  //     });
-  //   }
-  // }
+  const stopVideoStream = () => {
+    const videoOutput = document.getElementById('video-output');
+    if (videoOutput instanceof HTMLVideoElement) {
+      const tracks = videoStream.getTracks(); // 스트림의 모든 트랙 가져오기
+      tracks.forEach(function (track) {
+        track.stop(); // 트랙 종료
+      });
+    }
+  };
 
   // 일정간격마다 비디오 캡처
   useInterval(() => {
@@ -96,11 +94,17 @@ const CameraGuidePage = () => {
     if ('navigator' in window) {
       showCameraGuide();
     }
+    return () => stopVideoStream();
   }, []);
 
   return (
     <RootLayout>
-      <CameraGuide isVideoLoaded={isVideoLoaded} />
+      {isStartRecord && <AttentionStatus isAttention={isAttention} />}
+      <CameraGuide
+        isVideoLoaded={isVideoLoaded}
+        isStartRecord={isStartRecord}
+        handleStartRecord={handleStartRecord}
+      />
     </RootLayout>
   );
 };
