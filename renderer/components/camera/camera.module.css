@@ -41,8 +41,5 @@
   border-radius: 100px;
   font-weight: bold;
   color: var(--color-black);
-}
-
-.buttonContainer:hover {
   cursor: pointer;
 }

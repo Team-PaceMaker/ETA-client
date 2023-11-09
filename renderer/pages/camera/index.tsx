@@ -9,7 +9,7 @@ import AttentionStatus from '../../components/camera/AttentionStatus';
 import { showNotification } from '../../utils/notification';
 
 const constraints = { audio: false, video: true };
-const CAPTURE_DELAY = 2000;
+const CAPTURE_DELAY = 1000;
 const IMAGE_WIDTH = 224;
 const IMAGE_HEIGHT = 224;
 
@@ -20,6 +20,8 @@ const CameraGuidePage = () => {
   const [isStartRecord, setIsStartRecord] = useState(false);
   const [isAttention, setIsAttention] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
+
+  const [timer, setTimer] = useState(0);
 
   const handleStartRecord = () => {
     setIsStartRecord(true);
@@ -55,9 +57,14 @@ const CameraGuidePage = () => {
     // Blob 데이터를 FormData에 담아 송신
     const formData = new FormData();
     formData.append('image', blob, 'test.jpeg');
+
+    // console.time();
     const attention = await getAttentionStatus(formData);
+    // console.timeEnd();
     if (attention) setIsAttention(true);
     else setIsAttention(false);
+
+    console.log('attention:', attention);
 
     // TODO: 집중상태에 따라 푸시알림. 즉각적으로 주는 게 아닌 일정 간격마다 푸시알림.
     // showNotification(attention);

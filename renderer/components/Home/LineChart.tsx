@@ -28,8 +28,8 @@ const LineChart = () => {
 
 function drawChart(divRef: React.RefObject<HTMLDivElement>) {
   const margin = { top: 10, right: 30, bottom: 30, left: 60 },
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+    width = 560 - margin.left - margin.right,
+    height = 450 - margin.top - margin.bottom;
 
   d3.select('#line-container').select('svg').remove();
 
@@ -58,8 +58,10 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
   svg
     .append('g')
     .attr('transform', 'translate(0,' + height + ')')
+    .style('font-size', '15px')
+    .style('color', 'white')
     .call(d3.axisBottom(x));
-  svg.append('g').call(d3.axisLeft(y));
+  svg.append('g').style('font-size', '15px').style('color', 'white').call(d3.axisLeft(y));
 
   svg
     .append('path')
