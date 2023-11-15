@@ -27,7 +27,7 @@ const LineChart = () => {
 };
 
 function drawChart(divRef: React.RefObject<HTMLDivElement>) {
-  const margin = { top: 10, right: 30, bottom: 30, left: 60 },
+  const margin = { top: 50, right: 50, bottom: 30, left: 50 },
     width = 700 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom;
 
@@ -70,12 +70,21 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
   svg
     .append('g')
     .attr('transform', `translate(0, ${height})`)
-    .call(d3.axisBottom(xScale).ticks(7).tickFormat(d3.timeFormat('%m-%d'))) // 일자 형식으로 포맷팅);
+    .call(d3.axisBottom(xScale).ticks(7).tickFormat(d3.timeFormat('%m-%d')).tickPadding(10)) // 일자 형식으로 포맷팅);
     .style('font-size', '15px')
     .style('color', 'white');
 
   // y축 생성
-  svg.append('g').call(d3.axisLeft(yScale)).style('font-size', '15px').style('color', 'white');
+  svg
+    .append('g')
+    .call(
+      d3
+        .axisLeft(yScale)
+        .tickFormat((d) => `${d}시간`)
+        .tickPadding(10)
+    )
+    .style('font-size', '15px')
+    .style('color', 'white');
 
   // 그래프 그리기
   svg
@@ -85,11 +94,11 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
     .attr('stroke', COLOR.GREEN)
     .attr('stroke-width', 5)
     // .attr('d', line)
-    .style('opacity', 0) // 초기에는 투명도를 0으로 설정
+    .style('opacity', 0)
     .transition()
     .ease(d3.easeCubicOut)
-    .style('opacity', 1) // 애니메이션을 통해 투명도를 1로 증가시킴
-    .duration(500) // 애니메이션 지속 시간 (2초)
+    .style('opacity', 1)
+    .duration(500) // 애니메이션 지속 시간
     .attrTween('d', interpolateLine); // 애니메이션 트위닝 함수 적용
 
   // 그림자 생성
@@ -122,6 +131,33 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
     .attr('cy', (d) => yScale(d.value) as number)
     .attr('r', 5)
     .attr('fill', 'white')
+    .on('mouseover', (event, d) => {
+      // 마우스 오버 시에 툴팁을 표시
+      const tooltip = svg.append('g').attr('class', 'tooltip');
+
+      tooltip
+        .append('rect')
+        .attr('x', (xScale(d.date) as number) - 30)
+        .attr('y', (yScale(d.value) as number) - 40)
+        .attr('width', 60)
+        .attr('height', 45)
+        .attr('fill', 'white')
+        .attr('rx', 10) // 둥근 사각형의 가로 반지름
+        .attr('ry', 10); // 둥근 사각형의 세로 반지름
+
+      tooltip
+        .append('text')
+        .attr('x', xScale(d.date) as number)
+        .attr('y', (yScale(d.value) as number) - 10)
+        .attr('text-anchor', 'middle')
+        .attr('font-size', 16)
+        .attr('fill', 'black')
+        .text(`${d.value} ETA`);
+    })
+
+    .on('mouseout', () => {
+      svg.select('.tooltip').remove();
+    })
     .style('opacity', 0)
     .transition()
     .duration(1000)
