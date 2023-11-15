@@ -50,20 +50,6 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-  // const parseDate: any = d3.timeParse('%Y-%m-%d');
-  // const data = dummyData.map(({ date, value }) => ({
-  //   date: parseDate(date),
-  //   value,
-  // }));
-
-  // Add X axis
-  // const xDomain = d3.extent(data, (data) => data.date) as [number, number];
-  // const x = d3.scaleUtc().domain(xDomain).range([0, width]);
-
-  // Add Y axis
-  // const yMax = d3.max(data, (data) => data.value) as number;
-  // const y = d3.scaleLinear().domain([0, yMax]).range([height, 0]);
-
   // D3.js 스케일 설정
   const xScale = d3
     .scaleTime()
@@ -80,9 +66,6 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
     .line<DataPoint>()
     .x((d) => xScale(d.date) as number)
     .y((d) => yScale(d.value) as number);
-  // .curve(d3.curveMonotoneX); // monotone 보간 함수 사용
-
-  // .curve(d3.curveBasis);
 
   function interpolateLine(d: DataPoint[]) {
     return function (t: number) {
@@ -103,17 +86,40 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
   // y축 생성
   svg.append('g').call(d3.axisLeft(yScale)).style('font-size', '15px').style('color', 'white');
 
+  // 그래프 그리기
   svg
     .append('path')
     .datum(realData)
     .attr('fill', 'none')
     .attr('stroke', COLOR.GREEN)
-    .attr('stroke-width', 3)
-    .attr('d', line)
-    // .attr('d', line.curve(d3.curveBasis))
-    .transition() // 트랜지션 시작
+    .attr('stroke-width', 5)
+    // .attr('d', line)
+    .style('opacity', 0) // 초기에는 투명도를 0으로 설정
+    .transition()
+    .ease(d3.easeCubicOut)
+    .style('opacity', 1) // 애니메이션을 통해 투명도를 1로 증가시킴
     .duration(500) // 애니메이션 지속 시간 (2초)
     .attrTween('d', interpolateLine); // 애니메이션 트위닝 함수 적용
+
+  // 그림자 생성
+  const area = d3
+    .area<DataPoint>()
+    .x((d) => xScale(d.date) as number)
+    .y0(height)
+    .y1((d) => yScale(d.value) as number);
+
+  // 그림자 영역 추가
+  svg
+    .append('path')
+    .datum(realData)
+    .attr('class', 'area')
+    .attr('d', area)
+    .style('fill', 'rgba(105, 241, 118, 0.3)') // 그림자의 색 및 투명도 설정
+    .style('opacity', 0) // 초기에는 투명도를 0으로 설정
+    .transition()
+    .duration(1000)
+    .ease(d3.easeCubicOut)
+    .style('opacity', 1); // 애니메이션을 통해 투명도를 1로 증가시킴
 }
 
 export default LineChart;
