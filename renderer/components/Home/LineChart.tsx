@@ -16,15 +16,6 @@ const realData: DataPoint[] = [
   { date: new Date('2023-11-16'), value: 3 },
 ];
 
-// const dummyData = [
-//   { date: '2023-09-18', value: 5 },
-//   { date: '2023-09-19', value: 3 },
-//   { date: '2023-09-20', value: 4 },
-//   { date: '2023-09-21', value: 8 },
-//   { date: '2023-09-22', value: 6 },
-//   { date: '2023-09-23', value: 3 },
-// ];
-
 const LineChart = () => {
   const divRef = useRef<HTMLDivElement>(null);
 
@@ -37,7 +28,7 @@ const LineChart = () => {
 
 function drawChart(divRef: React.RefObject<HTMLDivElement>) {
   const margin = { top: 10, right: 30, bottom: 30, left: 60 },
-    width = 560 - margin.left - margin.right,
+    width = 700 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom;
 
   d3.select('#line-container').select('svg').remove();
@@ -114,12 +105,28 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
     .datum(realData)
     .attr('class', 'area')
     .attr('d', area)
-    .style('fill', 'rgba(105, 241, 118, 0.3)') // 그림자의 색 및 투명도 설정
-    .style('opacity', 0) // 초기에는 투명도를 0으로 설정
+    .style('fill', 'rgba(105, 241, 118, 0.3)')
+    .style('opacity', 0)
     .transition()
     .duration(1000)
     .ease(d3.easeCubicOut)
-    .style('opacity', 1); // 애니메이션을 통해 투명도를 1로 증가시킴
+    .style('opacity', 1);
+
+  // 데이터 점 추가
+  svg
+    .selectAll('circle')
+    .data(realData)
+    .enter()
+    .append('circle')
+    .attr('cx', (d) => xScale(d.date) as number)
+    .attr('cy', (d) => yScale(d.value) as number)
+    .attr('r', 5)
+    .attr('fill', 'white')
+    .style('opacity', 0)
+    .transition()
+    .duration(1000)
+    .ease(d3.easeCubicOut)
+    .style('opacity', 1);
 }
 
 export default LineChart;
