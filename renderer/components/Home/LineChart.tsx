@@ -80,6 +80,17 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
     .line<DataPoint>()
     .x((d) => xScale(d.date) as number)
     .y((d) => yScale(d.value) as number);
+  // .curve(d3.curveMonotoneX); // monotone 보간 함수 사용
+
+  // .curve(d3.curveBasis);
+
+  function interpolateLine(d: DataPoint[]) {
+    return function (t: number) {
+      const tIndex = Math.floor(t * (d.length - 1));
+      const tData = d.slice(0, tIndex + 1);
+      return line(tData) as string;
+    };
+  }
 
   // x축 생성
   svg
@@ -98,8 +109,11 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
     .attr('fill', 'none')
     .attr('stroke', COLOR.GREEN)
     .attr('stroke-width', 3)
-    // .attr('d', line.curve(d3.curveBasis));
-    .attr('d', line);
+    .attr('d', line)
+    // .attr('d', line.curve(d3.curveBasis))
+    .transition() // 트랜지션 시작
+    .duration(500) // 애니메이션 지속 시간 (2초)
+    .attrTween('d', interpolateLine); // 애니메이션 트위닝 함수 적용
 }
 
 export default LineChart;
