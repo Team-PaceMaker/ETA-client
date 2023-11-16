@@ -7,6 +7,8 @@ import { getAttentionStatus, startTakingVideo, stopTakingVideo } from '../../api
 import CameraGuide from '../../components/camera/CameraGuide';
 import AttentionStatus from '../../components/camera/AttentionStatus';
 import { showNotification } from '../../utils/notification';
+import { useRecoilState } from 'recoil';
+import { attentionState } from '../../states/attention';
 
 const constraints = { audio: false, video: true };
 const CAPTURE_DELAY = 1000;
@@ -22,7 +24,7 @@ const CameraGuidePage = () => {
   const [isAttention, setIsAttention] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
-  const [attentionId, setAttentionId] = useState(-1);
+  const [attentionId, setAttentionId] = useRecoilState(attentionState);
   const [timer, setTimer] = useState(0);
 
   const handleStartRecord = async () => {

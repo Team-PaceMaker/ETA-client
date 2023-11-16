@@ -1,10 +1,13 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styles from './result.module.css';
 import RootLayout from '../RootLayout';
 import PieChart from '../../components/Statistic/PieChart';
 import FONT from '../../constants/fonts';
 import TextButton from '../../components/common/TextButton';
+import { getStatisticResult } from '../../apis/camera';
+import { useRecoilValue } from 'recoil';
+import { attentionState } from '../../states/attention';
 
 interface IStatisticResult {
   totalTime: Date;
@@ -12,12 +15,27 @@ interface IStatisticResult {
   focusTimeZone: string;
 }
 
+// interface IStatisticServer{
+//   attentionCount: number;
+//   attentionTimeList: [];
+//   distractionCount: number;
+//   totalTime: string;
+// }
+
 const ResultPage = () => {
   const [statisticResult, setStatisticResult] = useState<IStatisticResult>({
     totalTime: new Date('2023-11-16T00:00:00Z'),
     focusTime: new Date('2023-11-16T00:00:00Z'),
     focusTimeZone: '10-11시',
   });
+
+  const attentionId = useRecoilValue(attentionState);
+
+  useEffect(() => {
+    getStatisticResult(attentionId).then((res) => {
+      setStatisticResult(res);
+    });
+  }, []);
 
   return (
     <RootLayout>
