@@ -98,7 +98,7 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
     .transition()
     .ease(d3.easeCubicOut)
     .style('opacity', 1)
-    .duration(500) // 애니메이션 지속 시간
+    .duration(2000) // 애니메이션 지속 시간
     .attrTween('d', interpolateLine); // 애니메이션 트위닝 함수 적용
 
   // 그림자 생성
@@ -117,7 +117,7 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
     .style('fill', 'rgba(105, 241, 118, 0.3)')
     .style('opacity', 0)
     .transition()
-    .duration(1000)
+    .duration(2000)
     .ease(d3.easeCubicOut)
     .style('opacity', 1);
 
