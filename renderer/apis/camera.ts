@@ -22,10 +22,17 @@ export const getAttentionStatus = async (formData: FormData) => {
 
 export const startTakingVideo = async () => {
   try {
-    // const result = await axios.post('http://eta-server.kro.kr:8085/api/v1/attention/in');
     const result = await defaultServer.post('api/v1/attention/in');
-    console.log('startTakingVideo : ', result);
     return result.data.attentionId;
+  } catch (err) {
+    console.log('ERROR:', err);
+  }
+};
+
+export const stopTakingVideo = async (attentionId: number) => {
+  try {
+    const result = await defaultServer.post(`api/v1/attention/out/${attentionId}`);
+    return result.data;
   } catch (err) {
     console.log('ERROR:', err);
   }

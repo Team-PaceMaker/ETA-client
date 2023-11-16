@@ -6,7 +6,13 @@ import TextButton from '../common/TextButton';
 const GOOD_ATTENTION_TEXT = '오 잘하고 계신데요?';
 const BAD_ATTENTION_TEXT = '잠시 휴식을 취해볼까요?';
 
-const AttentionStatus = ({ isAttention }: { isAttention: boolean }) => {
+const AttentionStatus = ({
+  isAttention,
+  handleStopRecord,
+}: {
+  isAttention: boolean;
+  handleStopRecord: () => void;
+}) => {
   return (
     <div className={styles.videoBodyContainer}>
       <div style={FONT.BODY1} className={styles.statusContainer}>
@@ -20,7 +26,7 @@ const AttentionStatus = ({ isAttention }: { isAttention: boolean }) => {
         {isAttention ? GOOD_ATTENTION_TEXT : BAD_ATTENTION_TEXT}
       </div>
       <Link href='/result'>
-        <TextButton>STOP ETA</TextButton>
+        <TextButton onClick={handleStopRecord}>STOP ETA</TextButton>
       </Link>
     </div>
   );

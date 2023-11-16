@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react';
 import RootLayout from '../RootLayout';
 import useInterval from '../../hooks/useInterval';
 import FONT from '../../constants/fonts';
-import { getAttentionStatus, startTakingVideo } from '../../apis/camera';
+import { getAttentionStatus, startTakingVideo, stopTakingVideo } from '../../apis/camera';
 import CameraGuide from '../../components/camera/CameraGuide';
 import AttentionStatus from '../../components/camera/AttentionStatus';
 import { showNotification } from '../../utils/notification';
@@ -29,6 +29,11 @@ const CameraGuidePage = () => {
     const id = await startTakingVideo();
     setIsStartRecord(true);
     setAttentionId(id);
+  };
+
+  const handleStopRecord = async () => {
+    await stopTakingVideo(attentionId);
+    setIsStartRecord(false);
   };
 
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
@@ -109,12 +114,17 @@ const CameraGuidePage = () => {
     if ('navigator' in window) {
       showCameraGuide();
     }
-    return () => stopVideoStream();
+    return () => {
+      setIsStartRecord(false);
+      stopVideoStream();
+    };
   }, []);
 
   return (
     <RootLayout>
-      {isStartRecord && <AttentionStatus isAttention={isAttention} />}
+      {isStartRecord && (
+        <AttentionStatus isAttention={isAttention} handleStopRecord={handleStopRecord} />
+      )}
       <CameraGuide
         isVideoLoaded={isVideoLoaded}
         isStartRecord={isStartRecord}
