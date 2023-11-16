@@ -3,13 +3,14 @@ import React, { useEffect, useState } from 'react';
 import RootLayout from '../RootLayout';
 import useInterval from '../../hooks/useInterval';
 import FONT from '../../constants/fonts';
-import { getAttentionStatus } from '../../apis/camera';
+import { getAttentionStatus, startTakingVideo } from '../../apis/camera';
 import CameraGuide from '../../components/camera/CameraGuide';
 import AttentionStatus from '../../components/camera/AttentionStatus';
 import { showNotification } from '../../utils/notification';
 
 const constraints = { audio: false, video: true };
 const CAPTURE_DELAY = 1000;
+const CAPTURE_DELAY_FREEZE = 100000000;
 const IMAGE_WIDTH = 224;
 const IMAGE_HEIGHT = 224;
 
@@ -23,7 +24,9 @@ const CameraGuidePage = () => {
 
   const [timer, setTimer] = useState(0);
 
-  const handleStartRecord = () => {
+  const handleStartRecord = async () => {
+    console.log('!');
+    await startTakingVideo();
     setIsStartRecord(true);
   };
 
@@ -97,9 +100,12 @@ const CameraGuidePage = () => {
   };
 
   // 일정간격마다 비디오 캡처
-  useInterval(() => {
-    captureImage();
-  }, CAPTURE_DELAY);
+  useInterval(
+    () => {
+      captureImage();
+    },
+    isStartRecord ? CAPTURE_DELAY : CAPTURE_DELAY_FREEZE
+  );
 
   useEffect(() => {
     if ('navigator' in window) {

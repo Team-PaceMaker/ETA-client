@@ -35,8 +35,7 @@ if (isProd) {
         app.dock.setMenu(dockMenu);
       }
     })
-    .then(makeWindow)
-    .then(showNotification);
+    .then(makeWindow);
 
   async function makeWindow() {
     const mainWindow = createWindow('main', {
@@ -78,13 +77,6 @@ if (isProd) {
     // });
   }
 })();
-
-const NOTIFICATION_TITLE = 'ETA';
-const NOTIFICATION_BODY = 'ETA에서 푸시알림을 사용할 수 있습니다.';
-
-function showNotification() {
-  new Notification({ title: NOTIFICATION_TITLE, body: NOTIFICATION_BODY }).show();
-}
 
 app.on('window-all-closed', () => {
   app.quit();
