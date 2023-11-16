@@ -22,12 +22,13 @@ const CameraGuidePage = () => {
   const [isAttention, setIsAttention] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
+  const [attentionId, setAttentionId] = useState(-1);
   const [timer, setTimer] = useState(0);
 
   const handleStartRecord = async () => {
-    console.log('!');
-    await startTakingVideo();
+    const id = await startTakingVideo();
     setIsStartRecord(true);
+    setAttentionId(id);
   };
 
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
@@ -60,14 +61,11 @@ const CameraGuidePage = () => {
     // Blob 데이터를 FormData에 담아 송신
     const formData = new FormData();
     formData.append('image', blob, 'test.jpeg');
+    formData.append('attentionId', attentionId.toString());
 
-    // console.time();
     const attention = await getAttentionStatus(formData);
-    // console.timeEnd();
     if (attention) setIsAttention(true);
     else setIsAttention(false);
-
-    console.log('attention:', attention);
 
     // TODO: 집중상태에 따라 푸시알림. 즉각적으로 주는 게 아닌 일정 간격마다 푸시알림.
     // showNotification(attention);

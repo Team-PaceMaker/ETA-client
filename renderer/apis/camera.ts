@@ -4,7 +4,7 @@ import { defaultServer, formDataServer } from './settings';
 export const getAttentionStatus = async (formData: FormData) => {
   try {
     const result = await formDataServer.post(
-      'api/v1/eta/attention',
+      'api/v1/attention',
       { image: formData },
       {
         transformRequest: [
