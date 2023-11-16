@@ -11,12 +11,12 @@ const HomePage = () => {
   return (
     <RootLayout>
       <div className={styles.homeContainer}>
-        <div className={styles.slogan}>
+        {/* <div className={styles.slogan}>
           <div id='slogan' className={styles.sloganText}>
             어제 미룬 업무
           </div>
           <div className={styles.sloganText}>ETA와 함께하자 !</div>
-        </div>
+        </div> */}
         <div className={styles.bodyContainer}>
           <div className={styles.titleContainer}>
             <div className={styles.title}>ETA와 하루를 시작해볼까요?</div>
