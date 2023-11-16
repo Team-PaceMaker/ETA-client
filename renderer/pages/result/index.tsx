@@ -3,16 +3,21 @@ import RootLayout from '../RootLayout';
 import PieChart from '../../components/Statistic/PieChart';
 import FONT from '../../constants/fonts';
 import Link from 'next/link';
+import TextButton from '../../components/common/TextButton';
 
 const BUTTON_TEXT = 'Home';
 
 const ResultPage = () => {
   return (
     <RootLayout>
-      <div className={styles.mainText} style={FONT.HEADLINE1}>
-        오늘 하루도 고생하셨습니다!!!
+      <div className={styles.titleContainer}>
+        <div className={styles.title} style={FONT.HEADLINE1}>
+          오늘 하루도 고생하셨습니다 !
+        </div>
+        <div className={styles.subTitle}>얼마나 집중했는지 확인해볼까요?</div>
       </div>
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 100 }}>
+
+      <div className={styles.resultBodyContainer}>
         <PieChart />
         <div className={styles.statisticContainer} style={FONT.HEADLINE1}>
           <div className={styles.resultContainer}>
@@ -30,11 +35,7 @@ const ResultPage = () => {
         </div>
       </div>
       <Link href='/home'>
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
-          <div className={styles.buttonContainer} style={FONT.BODY1}>
-            {BUTTON_TEXT}
-          </div>
-        </div>
+        <TextButton>HOME</TextButton>
       </Link>
     </RootLayout>
   );

@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from 'react';
 import styles from './home.module.css';
 import LineChart from '../../components/Home/LineChart';
 import Link from 'next/link';
 import RootLayout from '../RootLayout';
-import FONT from '../../constants/fonts';
-
-const BUTTON_TEXT = 'START ETA';
+import TextButton from '../../components/common/TextButton';
 
 const HomePage = () => {
   return (
@@ -17,9 +14,7 @@ const HomePage = () => {
         </div>
         <LineChart />
         <Link href='/camera'>
-          <div className={styles.buttonContainer} style={FONT.BODY1}>
-            {BUTTON_TEXT}
-          </div>
+          <TextButton>START ETA</TextButton>
         </Link>
       </div>
     </RootLayout>

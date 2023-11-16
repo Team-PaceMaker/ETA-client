@@ -23,13 +23,3 @@
 .attentionText {
   color: white;
 }
-
-.buttonContainer {
-  background-color: var(--color-green);
-  display: inline-block;
-  padding: 15px;
-  border-radius: 100px;
-  font-weight: bold;
-  color: var(--color-black);
-  cursor: pointer;
-}
