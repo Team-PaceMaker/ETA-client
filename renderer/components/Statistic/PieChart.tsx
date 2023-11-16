@@ -90,6 +90,11 @@ const PieChart = () => {
       .text((d) => d.data.label)
       .style('font-size', 20)
       .style('font-weight', 'bold')
+      .style('opacity', 0)
+      .transition()
+      .duration(2000)
+      .ease(d3.easeCubicOut)
+      .style('opacity', 1)
       .attr('transform', (d) => {
         const [x, y] = arcGenerator.centroid(d);
         return `translate(${x}, ${y})`;
