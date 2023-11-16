@@ -7,9 +7,12 @@ const LandingPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    setTimeout(() => {
+    router.prefetch('/home'); // production 모드에서만 동작
+    const timeout = setTimeout(() => {
       router.push('/home');
     }, 2000);
+
+    return () => clearTimeout(timeout);
   }, []);
   return (
     <RootLayout>
