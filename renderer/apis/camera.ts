@@ -37,3 +37,14 @@ export const stopTakingVideo = async (attentionId: number) => {
     console.log('ERROR:', err);
   }
 };
+
+export const getStatisticResult = async (attentionId: number) => {
+  try {
+    console.log('getStatisticResult : ', attentionId);
+    const result = await defaultServer.get(`api/v1/attention/record/${attentionId}`);
+    console.log('getStatisticResult : ', result);
+    return result.data;
+  } catch (err) {
+    console.log('ERROR:', err);
+  }
+};
