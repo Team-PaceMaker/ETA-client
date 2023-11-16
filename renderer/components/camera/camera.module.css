@@ -1,4 +1,5 @@
 .cameraBodyContainer {
+  height: 92vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -17,7 +18,7 @@
 }
 
 .loadingBlock {
-  width: 500px;
+  width: 600px;
   height: 150px;
 }
 
@@ -31,7 +32,7 @@
   top: 4px;
   position: relative;
   border: dotted 1px #ccc;
-  padding: 2px;
+  /* padding: 2px; */
 }
 
 .buttonContainer {

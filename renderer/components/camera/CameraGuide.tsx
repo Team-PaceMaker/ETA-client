@@ -29,9 +29,6 @@ const CameraGuide = ({
       <div className={styles.buttonContainer} style={FONT.BODY1} onClick={handleStartRecord}>
         {BUTTON_TEXT}
       </div>
-      {/* <button onClick={captureImage}>캡쳐하기</button> */}
-      {/* <div id="output" className={styles.output}></div> */}
-      {/* <img src={imageSrc} width={IMAGE_WIDTH} height={IMAGE_HEIGHT}></img> */}
     </div>
   );
 };
