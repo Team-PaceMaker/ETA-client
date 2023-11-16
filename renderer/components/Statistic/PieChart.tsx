@@ -71,7 +71,16 @@ const PieChart = () => {
       .attr('d', arcGenerator)
       .style('fill', (d) => color(d.data.label))
       .style('stroke', 'black')
-      .style('stroke-width', 2);
+      .style('stroke-width', 2)
+      .transition()
+      .duration(1500)
+      .attrTween('d', function (d) {
+        const start = { startAngle: 0, endAngle: 0 };
+        const interpolate = d3.interpolate(start, d);
+        return function (t) {
+          return arcGenerator(interpolate(t));
+        };
+      });
 
     // Append text labels
     arc
