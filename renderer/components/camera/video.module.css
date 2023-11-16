@@ -4,7 +4,7 @@
   justify-content: center;
   align-items: center;
   gap: 25px;
-  margin-top: 100px;
+  margin-top: 90px;
 }
 
 .statusContainer {
@@ -17,19 +17,9 @@
 }
 
 .attentionStatus {
-  font-size: 150px;
+  font-size: 205px;
 }
 
 .attentionText {
   color: white;
-}
-
-.buttonContainer {
-  background-color: var(--color-green);
-  display: inline-block;
-  padding: 15px;
-  border-radius: 100px;
-  font-weight: bold;
-  color: var(--color-black);
-  cursor: pointer;
 }

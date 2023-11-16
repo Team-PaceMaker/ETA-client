@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import styles from './camera.module.css';
 import FONT from '../../constants/fonts';
 import cn from 'classnames';
+import TextButton from '../common/TextButton';
 
 const VIDEO_WIDTH = 600;
 
@@ -26,12 +27,7 @@ const CameraGuide = ({
       <div className={styles.videoText} style={FONT.BODY1}>
         {VIDEO_TEXT}
       </div>
-      <div className={styles.buttonContainer} style={FONT.BODY1} onClick={handleStartRecord}>
-        {BUTTON_TEXT}
-      </div>
-      {/* <button onClick={captureImage}>캡쳐하기</button> */}
-      {/* <div id="output" className={styles.output}></div> */}
-      {/* <img src={imageSrc} width={IMAGE_WIDTH} height={IMAGE_HEIGHT}></img> */}
+      <TextButton onClick={handleStartRecord}>VIDEO START</TextButton>
     </div>
   );
 };

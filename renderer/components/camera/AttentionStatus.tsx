@@ -1,6 +1,7 @@
 import styles from './video.module.css';
 import FONT from '../../constants/fonts';
 import Link from 'next/link';
+import TextButton from '../common/TextButton';
 
 const GOOD_ATTENTION_TEXT = '오 잘하고 계신데요?';
 const BAD_ATTENTION_TEXT = '잠시 휴식을 취해볼까요?';
@@ -19,9 +20,7 @@ const AttentionStatus = ({ isAttention }: { isAttention: boolean }) => {
         {isAttention ? GOOD_ATTENTION_TEXT : BAD_ATTENTION_TEXT}
       </div>
       <Link href='/result'>
-        <div className={styles.buttonContainer} style={FONT.BODY1}>
-          STOP ETA
-        </div>
+        <TextButton>STOP ETA</TextButton>
       </Link>
     </div>
   );

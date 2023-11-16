@@ -27,7 +27,7 @@ const LineChart = () => {
 };
 
 function drawChart(divRef: React.RefObject<HTMLDivElement>) {
-  const margin = { top: 50, right: 50, bottom: 30, left: 50 },
+  const margin = { top: 50, right: 50, bottom: 50, left: 50 },
     width = 700 - margin.left - margin.right,
     height = 450 - margin.top - margin.bottom;
 
@@ -98,7 +98,7 @@ function drawChart(divRef: React.RefObject<HTMLDivElement>) {
     .transition()
     .ease(d3.easeCubicOut)
     .style('opacity', 1)
-    .duration(500) // 애니메이션 지속 시간
+    .duration(1000) // 애니메이션 지속 시간
     .attrTween('d', interpolateLine); // 애니메이션 트위닝 함수 적용
 
   // 그림자 생성
