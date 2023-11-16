@@ -35,7 +35,6 @@ const CameraGuidePage = () => {
 
   const handleStopRecord = async () => {
     await stopTakingVideo(attentionId);
-    setIsStartRecord(false);
   };
 
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
@@ -108,6 +107,8 @@ const CameraGuidePage = () => {
   useInterval(
     () => {
       captureImage();
+      setTimer((prev) => prev + 1);
+      console.log(timer);
     },
     isStartRecord ? CAPTURE_DELAY : CAPTURE_DELAY_FREEZE
   );
@@ -125,7 +126,11 @@ const CameraGuidePage = () => {
   return (
     <RootLayout>
       {isStartRecord && (
-        <AttentionStatus isAttention={isAttention} handleStopRecord={handleStopRecord} />
+        <AttentionStatus
+          isAttention={isAttention}
+          handleStopRecord={handleStopRecord}
+          timer={timer}
+        />
       )}
       <CameraGuide
         isVideoLoaded={isVideoLoaded}
@@ -137,7 +142,7 @@ const CameraGuidePage = () => {
 };
 
 // Base64 문자열을 Blob으로 변환하는 함수
-function dataURLtoBlob(dataURL: string) {
+const dataURLtoBlob = (dataURL: string) => {
   const byteString = atob(dataURL.split(',')[1]);
   const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
   const ab = new ArrayBuffer(byteString.length);
@@ -146,6 +151,6 @@ function dataURLtoBlob(dataURL: string) {
     ia[i] = byteString.charCodeAt(i);
   }
   return new Blob([ab], { type: mimeString });
-}
+};
 
 export default CameraGuidePage;

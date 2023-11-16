@@ -9,25 +9,27 @@ import { getStatisticResult } from '../../apis/camera';
 import { useRecoilValue } from 'recoil';
 import { attentionState } from '../../states/attention';
 
-interface IStatisticResult {
-  totalTime: Date;
-  focusTime: Date;
-  focusTimeZone: string;
-}
-
-// interface IStatisticServer{
-//   attentionCount: number;
-//   attentionTimeList: [];
-//   distractionCount: number;
-//   totalTime: string;
+// interface IStatisticResult {
+//   totalTime: Date;
+//   focusTime: Date;
+//   focusTimeZone: string;
 // }
 
+interface IStatisticServer {
+  attentionCount: number;
+  attentionTimeList: [];
+  distractionCount: number;
+  totalTime: string;
+}
+
 const ResultPage = () => {
-  const [statisticResult, setStatisticResult] = useState<IStatisticResult>({
-    totalTime: new Date('2023-11-16T00:00:00Z'),
-    focusTime: new Date('2023-11-16T00:00:00Z'),
-    focusTimeZone: '10-11시',
-  });
+  // const [statisticResult, setStatisticResult] = useState<IStatisticResult>({
+  //   totalTime: new Date('2023-11-16T00:00:00Z'),
+  //   focusTime: new Date('2023-11-16T00:00:00Z'),
+  //   focusTimeZone: '10-11시',
+  // });
+
+  const [statisticResult, setStatisticResult] = useState<IStatisticServer>({} as IStatisticServer);
 
   const attentionId = useRecoilValue(attentionState);
 
@@ -50,15 +52,17 @@ const ResultPage = () => {
         <div className={styles.statisticContainer} style={FONT.HEADLINE1}>
           <div className={styles.resultContainer}>
             <div>ETA 사용 시간 : </div>
-            <div>{statisticResult.totalTime.toTimeString().split(' ')[0]}</div>
+            <div>{statisticResult.totalTime}</div>
           </div>
           <div className={styles.resultContainer}>
             <div>집중 시간 : </div>
-            <div>{statisticResult.focusTime.toTimeString().split(' ')[0]}</div>
+            {/* <div>{statisticResult.attentionCount}</div> */}
+            <div>00:00:00</div>
           </div>
           <div className={styles.resultContainer}>
             <div>집중 시간대 : </div>
-            <div>{statisticResult.focusTimeZone}</div>
+            {/* <div>{statisticResult.distractionCount}</div> */}
+            <div>10-11시</div>
           </div>
         </div>
       </div>

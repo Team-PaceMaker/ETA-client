@@ -4,13 +4,13 @@
   justify-content: center;
   align-items: center;
   gap: 25px;
-  margin-top: 90px;
+  margin-top: 80px;
 }
 
 .statusContainer {
   background-color: var(--color-lightblack);
   display: inline-block;
-  padding: 15px 50px;
+  padding: 25px 60px;
   border-radius: 100px;
   font-weight: bold;
   color: var(--color-white);
