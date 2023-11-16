@@ -7,14 +7,8 @@ interface IData {
   value: number;
 }
 
-interface IFocusData {
-  [key: string]: number;
-}
-
 const PieChart = () => {
   const data = [
-    // { label: 'Apples', value: 10 },
-    // { label: 'Oranges', value: 20 },
     { label: '집중', value: 40 },
     { label: '집중 X', value: 60 },
   ];
@@ -31,11 +25,6 @@ const PieChart = () => {
 
   const width = 2 * outerRadius + margin.left + margin.right;
   const height = 2 * outerRadius + margin.top + margin.bottom;
-
-  // const colorScale = d3.scaleSequential().interpolator(d3.interpolateCool).domain([0, data.length]);
-
-  // const data2: IFocusData = { focus: 50, 'non-focus': 50 };
-  // var color = d3.scaleOrdinal().domain(Object.keys(data2)).range(['#98abc5', '#8a89a6']);
 
   function drawChart() {
     // Remove the old svg

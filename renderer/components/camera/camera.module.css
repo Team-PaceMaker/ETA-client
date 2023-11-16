@@ -1,5 +1,5 @@
 .cameraBodyContainer {
-  height: 92vh;
+  /* height: 92vh; */
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -7,7 +7,7 @@
 }
 
 .video {
-  margin-top: 10vh;
+  margin-top: 40px;
   transform: rotateY(180deg);
   -webkit-transform: rotateY(180deg); /* Safari and Chrome */
   -moz-transform: rotateY(180deg); /* Firefox */

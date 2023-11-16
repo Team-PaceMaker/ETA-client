@@ -28,7 +28,6 @@
 }
 
 .landingContainer {
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -48,4 +47,12 @@
   font-weight: bold;
   color: white;
   line-height: 170%;
+}
+
+.rootLayout {
+  height: 93vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
