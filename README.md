@@ -1,38 +1,16 @@
-<p align="center"><img src="https://i.imgur.com/NZfsD1p.png"></p>
+# ETA (Encourage Time for Attention)
 
-## Usage
+장시간 노트북 작업하는 현대인을 위한 딥러닝 기반 집중력 관리 서비스
 
-### Create an App
+# 실행방법
 
-```
-# with npx
-$ npx create-nextron-app my-app --example basic-typescript
-
-# with yarn
-$ yarn create nextron-app my-app --example basic-typescript
-
-# with pnpm
-$ pnpm dlx create-nextron-app my-app --example basic-typescript
+```bash
+git clone https://github.com/Team-PaceMaker/ETA-client.git
+npm install
+npm run dev
 ```
 
-### Install Dependencies
+# 시연영상
 
-```
-$ cd my-app
+https://github.com/Team-PaceMaker/ETA-client/assets/63959171/afd57ef3-cb13-4942-816b-bf2aa2e97b29
 
-# using yarn or npm
-$ yarn (or `npm install`)
-
-# using pnpm
-$ pnpm install --shamefully-hoist
-```
-
-### Use it
-
-```
-# development mode
-$ yarn dev (or `npm run dev` or `pnpm run dev`)
-
-# production build
-$ yarn build (or `npm run build` or `pnpm run build`)
-```
