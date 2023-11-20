@@ -23,7 +23,7 @@ const AttentionStatus = ({
       <div style={FONT.HEADLINE1} className={styles.attentionText}>
         {getHour(timer)}:{getMinute(timer)}:{getSecond(timer)}
       </div>
-      <div className={styles.attentionStatus}>{isAttention ? '🥴' : '🫵'}</div>
+      <div className={styles.attentionStatus}>{isAttention ? '😎' : '🫵'}</div>
       <div style={FONT.BODY1} className={styles.attentionText}>
         {isAttention ? GOOD_ATTENTION_TEXT : BAD_ATTENTION_TEXT}
       </div>

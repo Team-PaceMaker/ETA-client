@@ -108,7 +108,6 @@ const CameraGuidePage = () => {
     () => {
       captureImage();
       setTimer((prev) => prev + 1);
-      console.log(timer);
     },
     isStartRecord ? CAPTURE_DELAY : CAPTURE_DELAY_FREEZE
   );
