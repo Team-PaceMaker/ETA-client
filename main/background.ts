@@ -40,7 +40,7 @@ if (isProd) {
   async function makeWindow() {
     const mainWindow = createWindow('main', {
       width: 1200,
-      height: 800,
+      height: 720,
     });
 
     if (isProd) {

@@ -29,15 +29,15 @@ const LoginPage = () => {
     }
   }, [authCode]);
   return (
-    <RootLayout>
-      <div className={styles.loginContainer}>
-        {/* <div style={FONT.HEADLINE1}>집중시간에 따라 통계를 제공해드려요</div> */}
-        <Image src='/images/logo.png' width={400} height={200}></Image>
-        <div className={styles.loginButton} onClick={handleGoogleLogin}>
-          <Image src='/images/google.png' width={300} height={70}></Image>
-        </div>
+    // <RootLayout>
+    <div className={styles.loginContainer}>
+      {/* <div style={FONT.HEADLINE1}>집중시간에 따라 통계를 제공해드려요</div> */}
+      <Image src='/images/logo.png' width={400} height={200}></Image>
+      <div className={styles.loginButton} onClick={handleGoogleLogin}>
+        <Image src='/images/google.png' width={300} height={70}></Image>
       </div>
-    </RootLayout>
+    </div>
+    // </RootLayout>
   );
 };
 

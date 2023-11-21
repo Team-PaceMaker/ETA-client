@@ -79,13 +79,18 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
   };
   win = new BrowserWindow(browserOptions);
 
+  win.setTitle('ETA(Encourage Time for Attention)');
+
   let authCode = '';
 
   ipcMain.on('googleLogin', async (event, arg) => {
     const loginWindow = new BrowserWindow({
       width: 600,
       height: 600,
+      x: 10,
+      y: 20,
       parent: win,
+      modal: true,
       show: false, // 처음에는 숨김 처리
     });
 
