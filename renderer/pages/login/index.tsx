@@ -1,24 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
+import { ipcRenderer } from 'electron';
+import Image from 'next/image';
+import styles from './login.module.css';
+import FONT from '../../constants/fonts';
 import RootLayout from '../RootLayout';
-import electron, { ipcRenderer } from 'electron';
-
-// console.log(ipcRenderer.sendSync('synchronous-message', 'ping')); // "pong"이 출력됩니다.
-
-// ipcRenderer.on('authCode', (event, arg) => {
-//   console.log('authCode :', arg); // "pong"이 출력됩니다.
-// });
 
 const LoginPage = () => {
+  const router = useRouter();
+  const [authCode, setAuthCode] = useState('');
+
+  ipcRenderer?.on('authCode', (event, arg) => {
+    setAuthCode(arg);
+  });
+
   const handleGoogleLogin = () => {
-    ipcRenderer.send('googleLogin', 'ping');
-    ipcRenderer.on('authCode', (event, arg) => {
-      console.log('authCode :', arg); // "pong"이 출력됩니다.
-    });
+    ipcRenderer.send('googleLogin');
   };
+
+  useEffect(() => {
+    // TODO: login API 연동
+    // TODO: 로그인 정보가 있을 경우 자동 로그인
+    // login(authCode).then(() => {
+    //   router.push('/');
+    // });
+    if (authCode) {
+      router.push('/home');
+    }
+  }, [authCode]);
   return (
     <RootLayout>
-      <div>LoginPage</div>
-      <button onClick={handleGoogleLogin}>구글 로그인</button>
+      <div style={FONT.HEADLINE1}>집중시간에 따라 통계를 제공해드려요</div>
+      <Image src='/images/logo.png' width={400} height={200}></Image>
+      <div className={styles.loginButton} onClick={handleGoogleLogin}>
+        <Image src='/images/googleLoginButton.png' width={200} height={45}></Image>
+      </div>
     </RootLayout>
   );
 };
