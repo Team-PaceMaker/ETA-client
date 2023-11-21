@@ -1,17 +1,4 @@
-// import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
-// const electronOauth2 = require('electron-oauth2');
-
-import electronOauth2 from 'electron-oauth2';
-import {
-  app,
-  ipcMain,
-  ipcRenderer,
-  Menu,
-  nativeImage,
-  Notification,
-  Tray,
-  webContents,
-} from 'electron';
+import { app, Menu, nativeImage, Tray, webContents } from 'electron';
 import serve from 'electron-serve';
 import { config } from './config';
 import { createWindow } from './helpers';
