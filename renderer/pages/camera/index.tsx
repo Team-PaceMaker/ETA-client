@@ -1,14 +1,11 @@
-import Link from 'next/link';
+import { getAttentionStatus, startTakingVideo, stopTakingVideo } from '@apis/camera';
+import AttentionStatus from '@camera/AttentionStatus';
+import CameraGuide from '@camera/CameraGuide';
+import useInterval from '@hooks/useInterval';
+import { attentionState } from '@states/attention';
 import React, { useEffect, useState } from 'react';
-import RootLayout from '../RootLayout';
-import useInterval from '../../hooks/useInterval';
-import FONT from '../../constants/fonts';
-import { getAttentionStatus, startTakingVideo, stopTakingVideo } from '../../apis/camera';
-import CameraGuide from '../../components/camera/CameraGuide';
-import AttentionStatus from '../../components/camera/AttentionStatus';
-import { showNotification } from '../../utils/notification';
 import { useRecoilState } from 'recoil';
-import { attentionState } from '../../states/attention';
+import RootLayout from '../RootLayout';
 
 const constraints = { audio: false, video: true };
 const CAPTURE_DELAY = 1000;

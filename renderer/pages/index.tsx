@@ -6,10 +6,13 @@ import RootLayout from './RootLayout';
 const LandingPage = () => {
   const router = useRouter();
 
+  // setTimeout(() => {
+  //   router.push('/login')
+  // }, 2000)
   useEffect(() => {
     router.prefetch('/home'); // production 모드에서만 동작
     const timeout = setTimeout(() => {
-      router.push('/home');
+      router.push('/login');
     }, 2000);
 
     return () => clearTimeout(timeout);

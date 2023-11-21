@@ -1,4 +1,3 @@
-import axios from 'axios';
 import { defaultServer, formDataServer } from './settings';
 
 export const getAttentionStatus = async (formData: FormData) => {
@@ -40,7 +39,6 @@ export const stopTakingVideo = async (attentionId: number) => {
 
 export const getStatisticResult = async (attentionId: number) => {
   try {
-    console.log('getStatisticResult : ', attentionId);
     const result = await defaultServer.get(`api/v1/attention/record/${attentionId}`);
     console.log('getStatisticResult : ', result);
     return result.data;

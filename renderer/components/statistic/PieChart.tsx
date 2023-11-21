@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
-import COLOR from '../../constants/colors';
+import COLOR from '@constants/colors';
 
 interface IData {
   label: string;
@@ -42,7 +42,7 @@ const PieChart = () => {
     const color = d3
       .scaleOrdinal<string, string>()
       .domain(data.map((d) => d.label)) // 데이터 키를 domain으로 설정
-      .range([COLOR.GREEN, '#bdebc2']);
+      .range([COLOR.GREEN, COLOR.LIGHT_GREEN]);
 
     const pie = d3.pie<IData>().value((d) => d.value);
     const data_ready = pie(data);

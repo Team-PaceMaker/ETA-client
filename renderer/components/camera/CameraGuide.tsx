@@ -1,13 +1,8 @@
-import Link from 'next/link';
-import React, { useState } from 'react';
+import TextButton from '@common/TextButton';
+import FONT from '@constants/fonts';
 import styles from './camera.module.css';
-import FONT from '../../constants/fonts';
-import cn from 'classnames';
-import TextButton from '../common/TextButton';
 
 const VIDEO_WIDTH = 600;
-
-const BUTTON_TEXT = 'VIDEO START';
 const VIDEO_TEXT = '보이는 점선에 맞춰 촬영해주세요';
 
 const CameraGuide = ({

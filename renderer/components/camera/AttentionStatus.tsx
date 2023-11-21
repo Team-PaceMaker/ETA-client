@@ -1,7 +1,7 @@
-import styles from './video.module.css';
-import FONT from '../../constants/fonts';
+import TextButton from '@common/TextButton';
+import FONT from '@constants/fonts';
 import Link from 'next/link';
-import TextButton from '../common/TextButton';
+import styles from './video.module.css';
 
 const GOOD_ATTENTION_TEXT = '오 잘하고 계신데요?';
 const BAD_ATTENTION_TEXT = '잠시 휴식을 취해볼까요?';

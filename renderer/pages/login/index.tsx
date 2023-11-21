@@ -3,8 +3,8 @@ import { useRouter } from 'next/router';
 import { ipcRenderer } from 'electron';
 import Image from 'next/image';
 import styles from './login.module.css';
-import FONT from '../../constants/fonts';
 import RootLayout from '../RootLayout';
+import FONT from '@constants/fonts';
 
 const LoginPage = () => {
   const router = useRouter();
