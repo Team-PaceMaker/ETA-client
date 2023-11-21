@@ -1,4 +1,17 @@
-import { app, Menu, nativeImage, Notification, Tray } from 'electron';
+// import ElectronGoogleOAuth2 from '@getstation/electron-google-oauth2';
+// const electronOauth2 = require('electron-oauth2');
+
+import electronOauth2 from 'electron-oauth2';
+import {
+  app,
+  ipcMain,
+  ipcRenderer,
+  Menu,
+  nativeImage,
+  Notification,
+  Tray,
+  webContents,
+} from 'electron';
 import serve from 'electron-serve';
 import { config } from './config';
 import { createWindow } from './helpers';
@@ -46,7 +59,7 @@ if (isProd) {
     if (isProd) {
       app.commandLine.appendSwitch('ignore-certificate-errors'); // SSL 인증서 오류 무시 (개발용)
       app.commandLine.appendSwitch('allow-insecure-localhost'); // 로컬호스트에 대한 비보안 연결 허용 (개발용)
-      await mainWindow.loadURL('app://./home.html');
+      await mainWindow.loadURL('app://./index.html');
     } else {
       const port = process.argv[2];
       await mainWindow.loadURL(`http://localhost:${port}/`);
@@ -77,6 +90,8 @@ if (isProd) {
     // });
   }
 })();
+
+app.setAsDefaultProtocolClient('eta');
 
 app.on('window-all-closed', () => {
   app.quit();
