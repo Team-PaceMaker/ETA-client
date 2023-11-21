@@ -1,6 +1,6 @@
-import styles from './Button.module.css';
-import FONT from '../../constants/fonts';
 import { ForwardedRef, forwardRef } from 'react';
+import styles from './Button.module.css';
+import FONT from '@constants/fonts';
 
 interface ITextButton {
   children: string;

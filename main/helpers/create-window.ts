@@ -1,5 +1,6 @@
-import { screen, BrowserWindow } from 'electron';
+import { screen, BrowserWindow, ipcMain } from 'electron';
 import Store from 'electron-store';
+import { config } from '../config';
 
 import type { BrowserWindowConstructorOptions, Rectangle } from 'electron';
 
@@ -77,6 +78,38 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     },
   };
   win = new BrowserWindow(browserOptions);
+
+  let authCode = '';
+
+  ipcMain.on('googleLogin', async (event, arg) => {
+    const loginWindow = new BrowserWindow({
+      width: 600,
+      height: 600,
+      parent: win,
+      show: false, // 처음에는 숨김 처리
+    });
+
+    const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.CLIENT_ID}&redirect_uri=${config.REDIRECT_URI}&response_type=code&scope=${config.SCOPE}&access_type=offline`;
+
+    // 사용자 인증을 위한 웹뷰 생성
+    loginWindow.loadURL(oauthUrl);
+
+    // 웹뷰에서의 리디렉션을 캡처하여 처리
+    loginWindow.webContents.on('will-redirect', (event, url) => {
+      if (url.startsWith(config.REDIRECT_URI)) {
+        const code = url.split('?')[1].split('=')[1].split('&')[0];
+        authCode = code;
+        loginWindow.close();
+      }
+    });
+
+    loginWindow.show();
+
+    loginWindow.on('closed', () => {
+      // 창이 닫힌 후에 실행될 로직
+      event.reply('authCode', authCode);
+    });
+  });
 
   win.on('close', saveState);
 

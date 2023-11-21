@@ -1,15 +1,15 @@
-import Link from 'next/link';
+import { getAttentionStatus, startTakingVideo, stopTakingVideo } from '@apis/camera';
+import AttentionStatus from '@camera/AttentionStatus';
+import CameraGuide from '@camera/CameraGuide';
+import useInterval from '@hooks/useInterval';
+import { attentionState } from '@states/attention';
 import React, { useEffect, useState } from 'react';
+import { useRecoilState } from 'recoil';
 import RootLayout from '../RootLayout';
-import useInterval from '../../hooks/useInterval';
-import FONT from '../../constants/fonts';
-import { getAttentionStatus } from '../../apis/camera';
-import CameraGuide from '../../components/camera/CameraGuide';
-import AttentionStatus from '../../components/camera/AttentionStatus';
-import { showNotification } from '../../utils/notification';
 
 const constraints = { audio: false, video: true };
 const CAPTURE_DELAY = 1000;
+const CAPTURE_DELAY_FREEZE = 100000000;
 const IMAGE_WIDTH = 224;
 const IMAGE_HEIGHT = 224;
 
@@ -21,10 +21,17 @@ const CameraGuidePage = () => {
   const [isAttention, setIsAttention] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
+  const [attentionId, setAttentionId] = useRecoilState(attentionState);
   const [timer, setTimer] = useState(0);
 
-  const handleStartRecord = () => {
+  const handleStartRecord = async () => {
+    const id = await startTakingVideo();
     setIsStartRecord(true);
+    setAttentionId(id);
+  };
+
+  const handleStopRecord = async () => {
+    await stopTakingVideo(attentionId);
   };
 
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
@@ -57,14 +64,11 @@ const CameraGuidePage = () => {
     // Blob 데이터를 FormData에 담아 송신
     const formData = new FormData();
     formData.append('image', blob, 'test.jpeg');
+    formData.append('attentionId', attentionId.toString());
 
-    // console.time();
     const attention = await getAttentionStatus(formData);
-    // console.timeEnd();
     if (attention) setIsAttention(true);
     else setIsAttention(false);
-
-    console.log('attention:', attention);
 
     // TODO: 집중상태에 따라 푸시알림. 즉각적으로 주는 게 아닌 일정 간격마다 푸시알림.
     // showNotification(attention);
@@ -97,20 +101,33 @@ const CameraGuidePage = () => {
   };
 
   // 일정간격마다 비디오 캡처
-  useInterval(() => {
-    captureImage();
-  }, CAPTURE_DELAY);
+  useInterval(
+    () => {
+      captureImage();
+      setTimer((prev) => prev + 1);
+    },
+    isStartRecord ? CAPTURE_DELAY : CAPTURE_DELAY_FREEZE
+  );
 
   useEffect(() => {
     if ('navigator' in window) {
       showCameraGuide();
     }
-    return () => stopVideoStream();
+    return () => {
+      setIsStartRecord(false);
+      stopVideoStream();
+    };
   }, []);
 
   return (
     <RootLayout>
-      {isStartRecord && <AttentionStatus isAttention={isAttention} />}
+      {isStartRecord && (
+        <AttentionStatus
+          isAttention={isAttention}
+          handleStopRecord={handleStopRecord}
+          timer={timer}
+        />
+      )}
       <CameraGuide
         isVideoLoaded={isVideoLoaded}
         isStartRecord={isStartRecord}
@@ -121,7 +138,7 @@ const CameraGuidePage = () => {
 };
 
 // Base64 문자열을 Blob으로 변환하는 함수
-function dataURLtoBlob(dataURL: string) {
+const dataURLtoBlob = (dataURL: string) => {
   const byteString = atob(dataURL.split(',')[1]);
   const mimeString = dataURL.split(',')[0].split(':')[1].split(';')[0];
   const ab = new ArrayBuffer(byteString.length);
@@ -130,6 +147,6 @@ function dataURLtoBlob(dataURL: string) {
     ia[i] = byteString.charCodeAt(i);
   }
   return new Blob([ab], { type: mimeString });
-}
+};
 
 export default CameraGuidePage;

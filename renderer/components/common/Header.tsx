@@ -1,7 +1,7 @@
+import FONT from '@constants/fonts';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
-import FONT from '../../constants/fonts';
 import styles from './Header.module.css';
 
 const Header = () => {

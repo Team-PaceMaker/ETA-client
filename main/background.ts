@@ -1,4 +1,4 @@
-import { app, Menu, nativeImage, Notification, Tray } from 'electron';
+import { app, Menu, nativeImage, Tray, webContents } from 'electron';
 import serve from 'electron-serve';
 import { config } from './config';
 import { createWindow } from './helpers';
@@ -35,8 +35,7 @@ if (isProd) {
         app.dock.setMenu(dockMenu);
       }
     })
-    .then(makeWindow)
-    .then(showNotification);
+    .then(makeWindow);
 
   async function makeWindow() {
     const mainWindow = createWindow('main', {
@@ -47,7 +46,7 @@ if (isProd) {
     if (isProd) {
       app.commandLine.appendSwitch('ignore-certificate-errors'); // SSL 인증서 오류 무시 (개발용)
       app.commandLine.appendSwitch('allow-insecure-localhost'); // 로컬호스트에 대한 비보안 연결 허용 (개발용)
-      await mainWindow.loadURL('app://./home.html');
+      await mainWindow.loadURL('app://./index.html');
     } else {
       const port = process.argv[2];
       await mainWindow.loadURL(`http://localhost:${port}/`);
@@ -79,12 +78,7 @@ if (isProd) {
   }
 })();
 
-const NOTIFICATION_TITLE = 'ETA';
-const NOTIFICATION_BODY = 'ETA에서 푸시알림을 사용할 수 있습니다.';
-
-function showNotification() {
-  new Notification({ title: NOTIFICATION_TITLE, body: NOTIFICATION_BODY }).show();
-}
+app.setAsDefaultProtocolClient('eta');
 
 app.on('window-all-closed', () => {
   app.quit();
