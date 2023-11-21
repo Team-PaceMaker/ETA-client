@@ -13,7 +13,23 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve"
+    "jsx": "preserve",
+    "baseUrl": "./renderer",
+    "paths": {
+      "@common/*": ["components/common/*"],
+      "@home/*": ["components/home/*"],
+      "@camera/*": ["components/camera/*"],
+      "@statistic/*": ["components/statistic/*"],
+      "@constants/*": ["constants/*"],
+      "@pages/*": ["pages/*"],
+      "@styles/*": ["styles/*"],
+      "@utils/*": ["utils/*"],
+      "@apis/*": ["apis/*"],
+      "@states/*": ["states/*"],
+      "@image/*": ["public/image/*"],
+      "@types/*": ["types/*"],
+      "@hooks/*": ["hooks/*"]
+    }
   },
   "exclude": ["node_modules", "renderer/next.config.js", "app", "dist"]
 }
