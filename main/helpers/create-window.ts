@@ -87,8 +87,6 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
     const loginWindow = new BrowserWindow({
       width: 600,
       height: 600,
-      x: 10,
-      y: 20,
       parent: win,
       modal: true,
       show: false, // 처음에는 숨김 처리
