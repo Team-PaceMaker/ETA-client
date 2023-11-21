@@ -18,16 +18,14 @@ const LandingPage = () => {
     return () => clearTimeout(timeout);
   }, []);
   return (
-    <RootLayout>
-      <div className={styles.landingContainer}>
-        <div className={styles.slogan}>
-          <div id='slogan' className={styles.sloganText}>
-            어제 미룬 업무
-          </div>
-          <div className={styles.sloganText}>&nbsp;&nbsp;&nbsp;&nbsp;ETA와 함께하자 !</div>
+    <div className={styles.landingContainer}>
+      <div className={styles.slogan}>
+        <div id='slogan' className={styles.sloganText}>
+          어제 미룬 업무
         </div>
+        <div className={styles.sloganText}>&nbsp;&nbsp;&nbsp;&nbsp;ETA와 함께하자 !</div>
       </div>
-    </RootLayout>
+    </div>
   );
 };
 
