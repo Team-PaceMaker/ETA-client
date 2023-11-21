@@ -9,8 +9,8 @@ interface IData {
 
 const PieChart = () => {
   const data = [
-    { label: '집중', value: 40 },
-    { label: '집중 X', value: 60 },
+    { label: '집중', value: 70 },
+    { label: '산만', value: 30 },
   ];
 
   const margin = {
@@ -60,7 +60,7 @@ const PieChart = () => {
       .attr('d', arcGenerator)
       .style('fill', (d) => color(d.data.label))
       .style('stroke', 'black')
-      .style('stroke-width', 2)
+      .style('stroke-width', 0)
       .transition()
       .duration(1500)
       .attrTween('d', function (d) {
@@ -77,7 +77,7 @@ const PieChart = () => {
       .attr('text-anchor', 'middle')
       .attr('alignment-baseline', 'middle')
       .text((d) => d.data.label)
-      .style('font-size', 20)
+      .style('font-size', 24)
       .style('font-weight', 'bold')
       .style('opacity', 0)
       .transition()
