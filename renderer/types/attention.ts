@@ -18,3 +18,8 @@ export interface IStatisticResult {
     attentionSlots: string[];
   };
 }
+
+export interface IStatisticCount {
+  distractionCount: number;
+  attentionCount: number;
+}

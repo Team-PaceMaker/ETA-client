@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import * as d3 from 'd3';
-import COLOR from '@constants/colors';
+import COLOR from 'constants/colors';
 
 interface IData {
   label: string;
