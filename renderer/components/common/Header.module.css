@@ -21,3 +21,11 @@
 .login:hover {
   cursor: pointer;
 }
+
+.logout:hover {
+  cursor: pointer;
+}
+
+.mypage:hover {
+  cursor: pointer;
+}

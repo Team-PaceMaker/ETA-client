@@ -43,9 +43,13 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   // D3.js 스케일 설정
+  // const xMin = d3.min(focusStatistic, (d) => d.date) as Date;
+  // const xMax = d3.max(focusStatistic, (d) => d.date) as Date;
+
   const xScale = d3
     .scaleTime()
     .domain(d3.extent(focusStatistic, (d) => d.date) as [Date, Date])
+    // .domain([xMin, xMax])
     .range([0, width]);
 
   const yScale = d3
@@ -61,6 +65,7 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
 
   function interpolateLine(d: IFocusPoint[]) {
     return function (t: number) {
+      console.log(t, d);
       const tIndex = Math.floor(t * (d.length - 1));
       const tData = d.slice(0, tIndex + 1);
       return line(tData) as string;
@@ -71,7 +76,7 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
   svg
     .append('g')
     .attr('transform', `translate(0, ${height})`)
-    .call(d3.axisBottom(xScale).ticks(7).tickFormat(d3.timeFormat('%m-%d')).tickPadding(10)) // 일자 형식으로 포맷팅);
+    .call(d3.axisBottom(xScale).ticks(5, d3.timeFormat('%m-%d')).tickPadding(10)) // 일자 형식으로 포맷팅);
     .style('font-size', '15px')
     .style('color', 'white');
 
