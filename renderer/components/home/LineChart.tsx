@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import COLOR from '@constants/colors';
+import COLOR from 'constants/colors';
 
 interface IFocusPoint {
   date: Date;

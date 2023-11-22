@@ -1,8 +1,8 @@
 import styles from './home.module.css';
 import Link from 'next/link';
 import RootLayout from '../RootLayout';
-import TextButton from '@common/TextButton';
-import LineChart from '@home/LineChart';
+import TextButton from 'common/TextButton';
+import LineChart from 'home/LineChart';
 
 const HomePage = () => {
   return (

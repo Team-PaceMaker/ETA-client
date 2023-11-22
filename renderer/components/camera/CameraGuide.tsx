@@ -1,5 +1,5 @@
-import TextButton from '@common/TextButton';
-import FONT from '@constants/fonts';
+import TextButton from 'common/TextButton';
+import FONT from 'constants/fonts';
 import styles from './camera.module.css';
 
 const VIDEO_WIDTH = 600;

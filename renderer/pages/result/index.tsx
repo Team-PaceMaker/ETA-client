@@ -3,24 +3,12 @@ import { useEffect, useState } from 'react';
 import { useRecoilValue } from 'recoil';
 import styles from './result.module.css';
 import RootLayout from '../RootLayout';
-import { attentionState } from '@states/attention';
-import { getStatisticResult } from '@apis/camera';
-import PieChart from '@statistic/PieChart';
-import FONT from '@constants/fonts';
-import TextButton from '@common/TextButton';
-
-// interface IStatisticResult {
-//   totalTime: Date;
-//   focusTime: Date;
-//   focusTimeZone: string;
-// }
-
-interface IStatisticServer {
-  attentionCount: number;
-  attentionTimeList: [];
-  distractionCount: number;
-  totalTime: string;
-}
+import { attentionState } from 'states/attention';
+import { getStatisticResult } from 'apis/camera';
+import PieChart from 'statistic/PieChart';
+import FONT from 'constants/fonts';
+import TextButton from 'common/TextButton';
+import { IStatisticResult } from 'types/attention';
 
 const ResultPage = () => {
   // const [statisticResult, setStatisticResult] = useState<IStatisticResult>({
@@ -29,7 +17,7 @@ const ResultPage = () => {
   //   focusTimeZone: '10-11시',
   // });
 
-  const [statisticResult, setStatisticResult] = useState<IStatisticServer>({} as IStatisticServer);
+  const [statisticResult, setStatisticResult] = useState<IStatisticResult>({} as IStatisticResult);
 
   const attentionId = useRecoilValue(attentionState);
 
