@@ -47,8 +47,8 @@ const ResultPage = () => {
             <div>{statisticResult.attentionTime}</div>
           </div>
           <div className={styles.resultContainer}>
-            <div>집중 시간대 : {getAttentionTimeSlots()}</div>
-            {/* <div>{statisticResult.attentionTimeSlots.attentionSlots[0]}</div> */}
+            <div>집중 시간대 : </div>
+            <div>{getAttentionTimeSlots()}</div>
           </div>
         </div>
       </div>
