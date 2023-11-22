@@ -1,3 +1,12 @@
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .loginContainer {
   height: 97vh;
   display: flex;
@@ -6,6 +15,7 @@
   justify-content: center;
   box-sizing: border-box;
   gap: 30px;
+  animation: fadeIn 1s linear forwards;
 }
 
 .loginButton {
