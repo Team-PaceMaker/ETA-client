@@ -43,13 +43,9 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
   // D3.js 스케일 설정
-  // const xMin = d3.min(focusStatistic, (d) => d.date) as Date;
-  // const xMax = d3.max(focusStatistic, (d) => d.date) as Date;
-
   const xScale = d3
     .scaleTime()
     .domain(d3.extent(focusStatistic, (d) => d.date) as [Date, Date])
-    // .domain([xMin, xMax])
     .range([0, width]);
 
   const yScale = d3
@@ -65,18 +61,27 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
 
   function interpolateLine(d: IFocusPoint[]) {
     return function (t: number) {
-      console.log(t, d);
       const tIndex = Math.floor(t * (d.length - 1));
       const tData = d.slice(0, tIndex + 1);
       return line(tData) as string;
     };
   }
 
+  // 날짜 데이터 배열
+  const dateArray = focusStatistic.map((data) => data.date);
+
   // x축 생성
   svg
     .append('g')
     .attr('transform', `translate(0, ${height})`)
-    .call(d3.axisBottom(xScale).ticks(5, d3.timeFormat('%m-%d')).tickPadding(10)) // 일자 형식으로 포맷팅);
+    .call(
+      d3
+        .axisBottom(xScale)
+        .tickValues(dateArray)
+        .tickSizeOuter(0)
+        .tickFormat(d3.timeFormat('%m-%d'))
+        .tickPadding(10)
+    )
     .style('font-size', '15px')
     .style('color', 'white');
 
@@ -99,7 +104,6 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
     .attr('fill', 'none')
     .attr('stroke', COLOR.GREEN)
     .attr('stroke-width', 5)
-    // .attr('d', line)
     .style('opacity', 0)
     .transition()
     .ease(d3.easeCubicOut)
@@ -148,8 +152,8 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
         .attr('width', 60)
         .attr('height', 45)
         .attr('fill', 'white')
-        .attr('rx', 10) // 둥근 사각형의 가로 반지름
-        .attr('ry', 10); // 둥근 사각형의 세로 반지름
+        .attr('rx', 10)
+        .attr('ry', 10);
 
       tooltip
         .append('text')
