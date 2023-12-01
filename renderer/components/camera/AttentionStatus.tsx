@@ -1,5 +1,5 @@
-import TextButton from '@common/TextButton';
-import FONT from '@constants/fonts';
+import TextButton from 'common/TextButton';
+import FONT from 'constants/fonts';
 import Link from 'next/link';
 import styles from './video.module.css';
 
