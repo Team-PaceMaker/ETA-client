@@ -1,0 +1,12 @@
+.mypageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-right: 230px;
+  margin-top: 50px;
+}
+
+.badgeText {
+  font-size: 16px;
+  color: white;
+}

@@ -1,4 +1,4 @@
-import FONT from '@constants/fonts';
+import FONT from 'constants/fonts';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import React from 'react';
@@ -12,8 +12,14 @@ const Header = () => {
       <div className={styles.logo} onClick={() => router.push('/home')}>
         <Image src='/images/logo.png' width={80} height={40}></Image>
       </div>
-      <div className={styles.login} onClick={() => router.push('/login')}>
+      {/* <div className={styles.login} onClick={() => router.push('/login')}>
         로그인
+      </div> */}
+      <div style={{ display: 'flex', gap: 20 }}>
+        <div className={styles.mypage} onClick={() => router.push('/mypage')}>
+          마이페이지
+        </div>
+        <div className={styles.logout}>로그아웃</div>
       </div>
     </div>
   );

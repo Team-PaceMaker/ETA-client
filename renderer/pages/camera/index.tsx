@@ -1,8 +1,8 @@
-import { getAttentionStatus, startTakingVideo, stopTakingVideo } from '@apis/camera';
-import AttentionStatus from '@camera/AttentionStatus';
-import CameraGuide from '@camera/CameraGuide';
-import useInterval from '@hooks/useInterval';
-import { attentionState } from '@states/attention';
+import { getAttentionStatus, startRecord, stopRecord } from 'apis/camera';
+import AttentionStatus from 'camera/AttentionStatus';
+import CameraGuide from 'camera/CameraGuide';
+import useInterval from 'hooks/useInterval';
+import { attentionState } from 'states/attention';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import RootLayout from '../RootLayout';
@@ -25,13 +25,13 @@ const CameraGuidePage = () => {
   const [timer, setTimer] = useState(0);
 
   const handleStartRecord = async () => {
-    const id = await startTakingVideo();
+    const id = await startRecord();
     setIsStartRecord(true);
     setAttentionId(id);
   };
 
   const handleStopRecord = async () => {
-    await stopTakingVideo(attentionId);
+    await stopRecord(attentionId);
   };
 
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
@@ -44,10 +44,23 @@ const CameraGuidePage = () => {
     canvas.width = w;
     canvas.height = h;
     var ctx = canvas.getContext('2d');
-    ctx.scale(-1, 1);
-    ctx.translate(-w, 0);
-    ctx.drawImage(video, 0, 0, w, h);
 
+    ctx.strokeStyle = 'red';
+    ctx.lineWidth = 2;
+
+    // ctx.beginPath();
+    // ctx.moveTo(w / 2, 0);
+    // ctx.lineTo(w / 2, h);
+    // ctx.stroke();
+
+    // ctx.scale(-1, 1);
+    // ctx.translate(-w, 0);
+    // ctx.drawImage(video, 0, 0, w, h);
+
+    // ctx.beginPath();
+    // ctx.moveTo(0, h / 2);
+    // ctx.lineTo(w, h / 2);
+    // ctx.stroke();
     return canvas;
   };
 
@@ -56,6 +69,7 @@ const CameraGuidePage = () => {
     // const output = document.getElementById('output');
     const canvas = capture(video, scaleFactor);
     if (canvas.width === 0) return;
+
     const imageSrc = canvas.toDataURL('image/jpeg', 0.8); // 2번째 인자를 0~1 까지 주면서 화질 조절. 1이 best
 
     // Base64 문자열을 Blob으로 변환

@@ -1,5 +1,5 @@
-import TextButton from '@common/TextButton';
-import FONT from '@constants/fonts';
+import TextButton from 'common/TextButton';
+import FONT from 'constants/fonts';
 import styles from './camera.module.css';
 
 const VIDEO_WIDTH = 600;
@@ -14,6 +14,11 @@ const CameraGuide = ({
   isStartRecord: boolean;
   handleStartRecord: () => void;
 }) => {
+  const handleDrawGuide = () => {
+    const canvas: HTMLCanvasElement = document.querySelector('.canvas');
+    const ctx = canvas.getContext('2d');
+  };
+
   return (
     <div className={isStartRecord ? styles.none : styles.cameraBodyContainer}>
       <video id='video-output' width={VIDEO_WIDTH} className={styles.video} />
@@ -22,6 +27,7 @@ const CameraGuide = ({
       <div className={styles.videoText} style={FONT.BODY1}>
         {VIDEO_TEXT}
       </div>
+      <canvas className={styles.canvas} id='cv1' width='600px' height='450px'></canvas>
       <TextButton onClick={handleStartRecord}>VIDEO START</TextButton>
     </div>
   );

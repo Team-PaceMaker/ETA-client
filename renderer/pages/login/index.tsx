@@ -3,8 +3,6 @@ import { useRouter } from 'next/router';
 import { ipcRenderer } from 'electron';
 import Image from 'next/image';
 import styles from './login.module.css';
-import RootLayout from '../RootLayout';
-import FONT from '@constants/fonts';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -29,13 +27,18 @@ const LoginPage = () => {
     }
   }, [authCode]);
   return (
-    <RootLayout>
-      <div style={FONT.HEADLINE1}>집중시간에 따라 통계를 제공해드려요</div>
-      <Image src='/images/logo.png' width={400} height={200}></Image>
+    <div className={styles.loginContainer}>
+      <Image src='/images/logo.png' alt='ETA main logo' width={400} height={200} priority></Image>
       <div className={styles.loginButton} onClick={handleGoogleLogin}>
-        <Image src='/images/googleLoginButton.png' width={200} height={45}></Image>
+        <Image
+          src='/images/google.png'
+          alt='google login button'
+          width={300}
+          height={70}
+          priority
+        ></Image>
       </div>
-    </RootLayout>
+    </div>
   );
 };
 

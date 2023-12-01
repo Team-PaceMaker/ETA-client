@@ -1,17 +1,18 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
-import COLOR from '@constants/colors';
+import COLOR from 'constants/colors';
+import { getStatisticCount } from 'apis/camera';
+import { attentionState } from 'states/attention';
+import { useRecoilValue } from 'recoil';
 
-interface IData {
+interface IResultCount {
   label: string;
   value: number;
 }
 
 const PieChart = () => {
-  const data = [
-    { label: '집중', value: 70 },
-    { label: '산만', value: 30 },
-  ];
+  const attentionId = useRecoilValue(attentionState);
+  const [resultCount, setResultCount] = useState<IResultCount[]>([]);
 
   const margin = {
     top: 50,
@@ -41,16 +42,16 @@ const PieChart = () => {
 
     const color = d3
       .scaleOrdinal<string, string>()
-      .domain(data.map((d) => d.label)) // 데이터 키를 domain으로 설정
+      .domain(resultCount.map((d) => d.label)) // 데이터 키를 domain으로 설정
       .range([COLOR.GREEN, COLOR.LIGHT_GREEN]);
 
-    const pie = d3.pie<IData>().value((d) => d.value);
-    const data_ready = pie(data);
+    const pie = d3.pie<IResultCount>().value((d) => d.value);
+    const data_ready = pie(resultCount);
 
     const arc = svg.selectAll().data(data_ready).enter();
 
     const arcGenerator = d3
-      .arc<d3.PieArcDatum<IData>>()
+      .arc<d3.PieArcDatum<IResultCount>>()
       .innerRadius(innerRadius)
       .outerRadius(outerRadius);
 
@@ -91,8 +92,24 @@ const PieChart = () => {
   }
 
   useEffect(() => {
+    getStatisticCount(attentionId).then((res) => {
+      if (res.attentionCount === 0 && res.distractionCount === 0) {
+        setResultCount([
+          { label: '집중', value: 1 },
+          { label: '산만', value: 1 },
+        ]);
+      } else {
+        setResultCount([
+          { label: '집중', value: res.attentionCount },
+          { label: '산만', value: res.distractionCount },
+        ]);
+      }
+    });
+  }, []);
+
+  useEffect(() => {
     drawChart();
-  }, [data]);
+  }, [resultCount]);
 
   return <div id='pie-container' />;
 };
