@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 import { ipcRenderer } from 'electron';
 import Image from 'next/image';
 import styles from './login.module.css';
+import { login } from 'apis/user';
 
 const LoginPage = () => {
   const router = useRouter();
@@ -13,17 +14,14 @@ const LoginPage = () => {
   });
 
   const handleGoogleLogin = () => {
-    ipcRenderer.send('googleLogin');
+    ipcRenderer.send('kakaoLogin');
   };
 
   useEffect(() => {
-    // TODO: login API 연동
-    // TODO: 로그인 정보가 있을 경우 자동 로그인
-    // login(authCode).then(() => {
-    //   router.push('/');
-    // });
     if (authCode) {
-      router.push('/home');
+      login(authCode).then(() => {
+        router.push('/home');
+      });
     }
   }, [authCode]);
   return (
@@ -31,9 +29,9 @@ const LoginPage = () => {
       <Image src='/images/logo.png' alt='ETA main logo' width={400} height={200} priority></Image>
       <div className={styles.loginButton} onClick={handleGoogleLogin}>
         <Image
-          src='/images/google.png'
-          alt='google login button'
-          width={300}
+          src='/images/kakao_login.png'
+          alt='kakao login button'
+          width={450}
           height={70}
           priority
         ></Image>

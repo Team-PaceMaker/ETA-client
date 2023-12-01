@@ -83,16 +83,16 @@ export default (windowName: string, options: BrowserWindowConstructorOptions): B
 
   let authCode = '';
 
-  ipcMain.on('googleLogin', async (event, arg) => {
+  ipcMain.on('kakaoLogin', async (event, arg) => {
     const loginWindow = new BrowserWindow({
       width: 600,
-      height: 600,
+      height: 720,
       parent: win,
       modal: true,
       show: false, // 처음에는 숨김 처리
     });
 
-    const oauthUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${config.CLIENT_ID}&redirect_uri=${config.REDIRECT_URI}&response_type=code&scope=${config.SCOPE}&access_type=offline`;
+    const oauthUrl = `https://kauth.kakao.com/oauth/authorize?client_id=${config.CLIENT_ID}&redirect_uri=${config.REDIRECT_URI}&response_type=code`;
 
     // 사용자 인증을 위한 웹뷰 생성
     loginWindow.loadURL(oauthUrl);
