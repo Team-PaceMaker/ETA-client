@@ -1,11 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import COLOR from 'constants/colors';
-
-interface IFocusPoint {
-  date: Date;
-  value: number;
-}
+import { getUserGraph } from 'apis/user';
+import { IFocusPoint } from 'types/user';
 
 const DUMMY_DATA: IFocusPoint[] = [
   { date: new Date('2023-11-11'), value: 0 },
@@ -17,14 +14,30 @@ const DUMMY_DATA: IFocusPoint[] = [
   { date: new Date('2023-11-17'), value: 3 },
 ];
 
-const LineChart = () => {
+const LineChart = ({ type }: { type: string }) => {
   const [focusStatistic, setFocusStatistic] = useState<IFocusPoint[]>(DUMMY_DATA);
+
+  const handleGetGraph = (graphType: string) => {
+    getUserGraph(graphType).then((res) => {
+      setFocusStatistic(res);
+    });
+  };
 
   useEffect(() => {
     drawChart(focusStatistic);
   }, [focusStatistic]);
 
-  return <div id='line-container'></div>;
+  return (
+    <div id='line-container'>
+      {type === 'mypage' && (
+        <>
+          <button onClick={() => handleGetGraph('day')}>일간</button>
+          <button onClick={() => handleGetGraph('week')}>주간</button>
+          <button onClick={() => handleGetGraph('month')}>월간</button>
+        </>
+      )}
+    </div>
+  );
 };
 
 const drawChart = (focusStatistic: IFocusPoint[]) => {

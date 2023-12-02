@@ -19,10 +19,9 @@ const MyPage = () => {
     <RootLayout>
       <div className={styles.mypageHeader}>
         <div style={FONT.HEADLINE1}>{userInfo?.name} 님</div>
-        {/* <div className={styles.badgeText}>뱃지를 획득해주세요</div> */}
         <div style={FONT.HEADLINE1}>최근 일주일간 집중 상태 그래프입니다.</div>
       </div>
-      <LineChart />
+      <LineChart type='mypage' />
     </RootLayout>
   );
 };

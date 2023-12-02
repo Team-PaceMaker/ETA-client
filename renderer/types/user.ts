@@ -10,3 +10,8 @@ export interface ILoginToken {
   accessToken: string;
   refreshToken: string;
 }
+
+export interface IFocusPoint {
+  date: Date;
+  value: number;
+}

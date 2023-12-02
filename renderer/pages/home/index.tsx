@@ -12,7 +12,7 @@ const HomePage = () => {
           <div className={styles.title}>ETA와 하루를 시작해볼까요?</div>
           <div className={styles.subTitle}>최근 일주일 간 ETA와 함께한 시간입니다.</div>
         </div>
-        <LineChart />
+        <LineChart type='home' />
         <Link href='/camera'>
           <TextButton>START ETA</TextButton>
         </Link>
