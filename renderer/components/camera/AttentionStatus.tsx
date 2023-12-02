@@ -1,13 +1,16 @@
-import { getAttentionStatus } from 'apis/camera';
+import { getAttentionStatus, getPushAlarmStatus } from 'apis/camera';
 import TextButton from 'common/TextButton';
 import FONT from 'constants/fonts';
 import useInterval from 'hooks/useInterval';
 import { useState } from 'react';
+import { showNotification } from 'utils/notification';
 import styles from './video.module.css';
 
 const GOOD_ATTENTION_TEXT = '오 잘하고 계신데요?';
 const BAD_ATTENTION_TEXT = '잠시 휴식을 취해볼까요?';
+const TIMER_DELAY = 1000;
 const CAPTURE_DELAY = 2000;
+const PUSH_ALARM_DELAY = 50000;
 let scaleFactor = 0.25;
 
 const AttentionStatus = ({
@@ -55,12 +58,9 @@ const AttentionStatus = ({
     // const output = document.getElementById('output');
     const canvas = capture(video, scaleFactor);
     if (canvas.width === 0) return;
-
     const imageSrc = canvas.toDataURL('image/jpeg', 0.8); // 2번째 인자를 0~1 까지 주면서 화질 조절. 1이 best
-
     // Base64 문자열을 Blob으로 변환
     const blob = dataURLtoBlob(imageSrc);
-
     // Blob 데이터를 FormData에 담아 송신
     const formData = new FormData();
     formData.append('image', blob, 'test.jpeg');
@@ -69,10 +69,13 @@ const AttentionStatus = ({
     const attention = await getAttentionStatus(formData);
     if (attention) setIsAttention(true);
     else setIsAttention(false);
-
-    // TODO: 집중상태에 따라 푸시알림. 즉각적으로 주는 게 아닌 일정 간격마다 푸시알림.
-    // showNotification(attention);
   };
+
+  useInterval(() => {
+    getPushAlarmStatus(attentionId).then((attentionStatus) => {
+      showNotification(attentionStatus);
+    });
+  }, PUSH_ALARM_DELAY);
 
   // 일정간격마다 비디오 캡처
   useInterval(() => {
@@ -81,7 +84,7 @@ const AttentionStatus = ({
 
   useInterval(() => {
     setTimer((prev) => prev + 1);
-  }, 1000);
+  }, TIMER_DELAY);
 
   return (
     <div className={styles.videoBodyContainer}>

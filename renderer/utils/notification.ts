@@ -1,4 +1,4 @@
-export const showNotification = (attentionStatus: boolean) => {
+export const showNotification = (attentionStatus: number) => {
   if (!('Notification' in window)) {
     alert('This browser does not support desktop notification');
   } else if (Notification.permission === 'granted') {
