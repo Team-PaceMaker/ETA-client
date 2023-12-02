@@ -1,3 +1,4 @@
+import { logout } from 'apis/user';
 import FONT from 'constants/fonts';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
@@ -6,6 +7,11 @@ import styles from './Header.module.css';
 
 const Header = () => {
   const router = useRouter();
+
+  const handleLogout = async () => {
+    await logout();
+    router.push('/login');
+  };
 
   return (
     <div className={styles.headerContainer} style={FONT.BODY1}>
@@ -19,7 +25,9 @@ const Header = () => {
         <div className={styles.mypage} onClick={() => router.push('/mypage')}>
           마이페이지
         </div>
-        <div className={styles.logout}>로그아웃</div>
+        <div className={styles.logout} onClick={handleLogout}>
+          로그아웃
+        </div>
       </div>
     </div>
   );
