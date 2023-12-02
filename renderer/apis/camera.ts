@@ -50,12 +50,12 @@ export const getStatisticCount = async (attentionId: number) => {
   return result.data;
 };
 
-export const getRecentFocusStatus = async (attentionId: number) => {
-  const result = await defaultServer.get<IFocusStatus>(`api/v1/attention/${attentionId}`);
+export const getPushAlarmStatus = async (attentionId: number) => {
+  const result = await defaultServer.get<IFocusStatus>(`api/v1/attention/recent/${attentionId}`);
   return result.data.prediction;
 };
 
-export const getPushAlarmStatus = async (attentionId: number) => {
-  const result = await defaultServer.get<IFocusStatus>(`api/v1/attention/push/${attentionId}`);
-  return result.data.prediction;
-};
+// export const getRecentFocusStatus = async (attentionId: number) => {
+//   const result = await defaultServer.get<IFocusStatus>(`api/v1/attention/${attentionId}`);
+//   return result.data.prediction;
+// };
