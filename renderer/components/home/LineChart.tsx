@@ -27,6 +27,12 @@ const LineChart = ({ type }: { type: string }) => {
     drawChart(focusStatistic);
   }, [focusStatistic]);
 
+  useEffect(() => {
+    getUserGraph('day').then((res) => {
+      setFocusStatistic(res);
+    });
+  }, []);
+
   return (
     <div id='line-container'>
       {type === 'mypage' && (
