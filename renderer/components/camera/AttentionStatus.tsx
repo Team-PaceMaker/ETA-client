@@ -1,6 +1,7 @@
 import TextButton from 'common/TextButton';
 import FONT from 'constants/fonts';
-import Link from 'next/link';
+import useInterval from 'hooks/useInterval';
+import { useState } from 'react';
 import styles from './video.module.css';
 
 const GOOD_ATTENTION_TEXT = '오 잘하고 계신데요?';
@@ -8,13 +9,17 @@ const BAD_ATTENTION_TEXT = '잠시 휴식을 취해볼까요?';
 
 const AttentionStatus = ({
   isAttention,
-  timer,
   handleStopRecord,
 }: {
   isAttention: boolean;
-  timer: number;
   handleStopRecord: () => void;
 }) => {
+  const [timer, setTimer] = useState(0);
+
+  useInterval(() => {
+    setTimer((prev) => prev + 1);
+  }, 1000);
+
   return (
     <div className={styles.videoBodyContainer}>
       <div style={FONT.HEADLINE1} className={styles.statusContainer}>
@@ -27,9 +32,7 @@ const AttentionStatus = ({
       <div style={FONT.BODY1} className={styles.attentionText}>
         {isAttention ? GOOD_ATTENTION_TEXT : BAD_ATTENTION_TEXT}
       </div>
-      <Link href='/result'>
-        <TextButton onClick={handleStopRecord}>STOP ETA</TextButton>
-      </Link>
+      <TextButton onClick={handleStopRecord}>STOP ETA</TextButton>
     </div>
   );
 };

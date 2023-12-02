@@ -6,23 +6,25 @@ import { attentionState } from 'states/attention';
 import React, { useEffect, useState } from 'react';
 import { useRecoilState } from 'recoil';
 import RootLayout from '../RootLayout';
+import { useRouter } from 'next/router';
 
 const constraints = { audio: false, video: true };
-const CAPTURE_DELAY = 1000;
+const CAPTURE_DELAY = 2000;
 const CAPTURE_DELAY_FREEZE = 100000000;
-const IMAGE_WIDTH = 224;
-const IMAGE_HEIGHT = 224;
+// const IMAGE_WIDTH = 224;
+// const IMAGE_HEIGHT = 224;
 
 let scaleFactor = 0.25;
 let videoStream: MediaStream;
 
 const CameraGuidePage = () => {
+  const router = useRouter();
+
   const [isStartRecord, setIsStartRecord] = useState(false);
   const [isAttention, setIsAttention] = useState(false);
   const [isVideoLoaded, setIsVideoLoaded] = useState(false);
 
   const [attentionId, setAttentionId] = useRecoilState(attentionState);
-  const [timer, setTimer] = useState(0);
 
   const handleStartRecord = async () => {
     const id = await startRecord();
@@ -32,6 +34,7 @@ const CameraGuidePage = () => {
 
   const handleStopRecord = async () => {
     await stopRecord(attentionId);
+    router.push('/result');
   };
 
   const capture = (video: HTMLVideoElement, scaleFactor: number) => {
@@ -118,7 +121,6 @@ const CameraGuidePage = () => {
   useInterval(
     () => {
       captureImage();
-      setTimer((prev) => prev + 1);
     },
     isStartRecord ? CAPTURE_DELAY : CAPTURE_DELAY_FREEZE
   );
@@ -136,11 +138,7 @@ const CameraGuidePage = () => {
   return (
     <RootLayout>
       {isStartRecord && (
-        <AttentionStatus
-          isAttention={isAttention}
-          handleStopRecord={handleStopRecord}
-          timer={timer}
-        />
+        <AttentionStatus isAttention={isAttention} handleStopRecord={handleStopRecord} />
       )}
       <CameraGuide
         isVideoLoaded={isVideoLoaded}
