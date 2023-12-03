@@ -4,16 +4,6 @@ import COLOR from 'constants/colors';
 import { getUserGraph } from 'apis/user';
 import { IFocusPoint } from 'types/user';
 
-const DUMMY_DATA: IFocusPoint[] = [
-  { date: new Date('2023-11-11'), attentionTime: 0 },
-  { date: new Date('2023-11-12'), attentionTime: 5 },
-  { date: new Date('2023-11-13'), attentionTime: 3 },
-  { date: new Date('2023-11-14'), attentionTime: 4 },
-  { date: new Date('2023-11-15'), attentionTime: 8 },
-  { date: new Date('2023-11-16'), attentionTime: 6 },
-  { date: new Date('2023-11-17'), attentionTime: 3 },
-];
-
 const LineChart = ({ type }: { type: string }) => {
   const [focusStatistic, setFocusStatistic] = useState<IFocusPoint[]>([]);
 
@@ -30,7 +20,7 @@ const LineChart = ({ type }: { type: string }) => {
   };
 
   useEffect(() => {
-    drawChart(focusStatistic);
+    if (focusStatistic.length > 0) drawChart(focusStatistic);
   }, [focusStatistic]);
 
   useEffect(() => {
@@ -79,10 +69,9 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
     .domain(d3.extent(focusStatistic, (d) => d.date) as [Date, Date])
     .range([0, width]);
 
-  const yScale = d3
-    .scaleLinear()
-    .domain([0, d3.max(focusStatistic, (d) => d.attentionTime) as number])
-    .range([height, 0]);
+  const yMaxValue = Math.ceil(d3.max(focusStatistic, (d) => d.attentionTime) as number);
+  console.log('yMaxValue :', yMaxValue);
+  const yScale = d3.scaleLinear().domain([0, yMaxValue]).range([height, 0]);
 
   // 선 생성
   const line = d3
@@ -122,6 +111,7 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
     .call(
       d3
         .axisLeft(yScale)
+        .ticks(yMaxValue)
         .tickFormat((d) => `${d}시간`)
         .tickPadding(10)
     )
@@ -208,8 +198,8 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
 
 const getHour = (second: number) => {
   const UNIT_HOUR = 60 * 60;
-  const hour = Math.floor(second / UNIT_HOUR);
-  return hour;
+  const hour = second / UNIT_HOUR;
+  return Number(hour.toFixed(2));
 };
 
 export default LineChart;
