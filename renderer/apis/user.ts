@@ -17,7 +17,7 @@ export const logout = async () => {
   localStorage.clear();
 };
 
-export const getUserGraph = async (graphType: string) => {
-  const result = await defaultServer.get(`api/v1/my/${graphType}`);
+export const getUserGraph = async (week: number) => {
+  const result = await defaultServer.get(`api/v1/my/day/${week}`);
   return result.data;
 };

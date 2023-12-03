@@ -13,5 +13,5 @@ export interface ILoginToken {
 
 export interface IFocusPoint {
   date: Date;
-  value: number;
+  attentionTime: number;
 }
