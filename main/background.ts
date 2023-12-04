@@ -1,4 +1,4 @@
-import { app, Menu, nativeImage, Tray, webContents } from 'electron';
+import { app, Menu, Tray } from 'electron';
 import serve from 'electron-serve';
 import { config } from './config';
 import { createWindow } from './helpers';
@@ -14,15 +14,10 @@ if (isProd) {
 let tray = null;
 
 (async () => {
-  // await app.whenReady().then(makeWindow).then(showNotification);
   await app
     .whenReady()
     .then(() => {
       process.env.SERVER_URL = config.SERVER_URL;
-
-      // if (process.platform === 'darwin') {
-      //   app.dock.setMenu(dockMenu);
-      // }
     })
     .then(makeWindow);
 
@@ -84,8 +79,14 @@ let tray = null;
       },
     ]);
 
-    tray = new Tray(`${__dirname}/ETA_black.png`); // 아이콘 이미지 경로
+    tray = new Tray(`${__dirname}/ETA_dark.png`);
     tray.setContextMenu(contextMenu);
+
+    // 다크모드 변경 감지
+    // nativeTheme.on('updated', () => {
+    //   const updatedSystemTheme = nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
+    //   tray.setImage(`${__dirname}/ETA_${updatedSystemTheme}.png`);
+    // });
   }
 })();
 
