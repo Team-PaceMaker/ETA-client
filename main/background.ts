@@ -13,27 +13,22 @@ if (isProd) {
 
 (async () => {
   // await app.whenReady().then(makeWindow).then(showNotification);
-  const dockMenu = Menu.buildFromTemplate([
-    {
-      label: 'New Window',
-      click() {
-        console.log('New Window');
-      },
-    },
-    {
-      label: 'New Window with Settings',
-      submenu: [{ label: 'Basic' }, { label: 'Pro' }],
-    },
-    { label: 'New Command...' },
-  ]);
+  // const dockMenu = Menu.buildFromTemplate([
+  //   {
+  //     label: '프로그램 종료',
+  //     click() {
+  //       app.exit();
+  //     },
+  //   },
+  // ]);
 
   await app
     .whenReady()
     .then(() => {
       process.env.SERVER_URL = config.SERVER_URL;
-      if (process.platform === 'darwin') {
-        app.dock.setMenu(dockMenu);
-      }
+      // if (process.platform === 'darwin') {
+      //   app.dock.setMenu(dockMenu);
+      // }
     })
     .then(makeWindow);
 
@@ -53,6 +48,24 @@ if (isProd) {
       await mainWindow.loadURL(`http://localhost:${port}/`);
       mainWindow.webContents.openDevTools();
     }
+
+    // 창 닫기 이벤트 설정
+    mainWindow.on('close', (event) => {
+      event.preventDefault();
+      mainWindow.hide();
+    });
+
+    // 메뉴에서 우클릭 종료 시 어플리케이션 종료
+    app.on('before-quit', () => {
+      app.exit();
+    });
+
+    app.on('activate', () => {
+      // 메뉴에서 아이콘 클릭 시 다시 창 띄우기
+      if (!mainWindow.isVisible()) {
+        mainWindow.show();
+      }
+    });
 
     // windows
     // const iconPath = `${__dirname}/logo.png`;
