@@ -11,21 +11,15 @@ if (isProd) {
   app.setPath('userData', `${app.getPath('userData')} (development)`);
 }
 
+let tray = null;
+
 (async () => {
   // await app.whenReady().then(makeWindow).then(showNotification);
-  // const dockMenu = Menu.buildFromTemplate([
-  //   {
-  //     label: '프로그램 종료',
-  //     click() {
-  //       app.exit();
-  //     },
-  //   },
-  // ]);
-
   await app
     .whenReady()
     .then(() => {
       process.env.SERVER_URL = config.SERVER_URL;
+
       // if (process.platform === 'darwin') {
       //   app.dock.setMenu(dockMenu);
       // }
@@ -67,28 +61,31 @@ if (isProd) {
       }
     });
 
-    // windows
-    // const iconPath = `${__dirname}/logo.png`;
-    // const tray = new Tray(nativeImage.createFromPath(iconPath));
-    // tray.setToolTip("ETA");
-    // const contextMenu = Menu.buildFromTemplate([
-    //   {
-    //     label: "열기",
-    //     type: "normal",
-    //     click() {
-    //       mainWindow.show();
-    //     },
-    //   },
-    //   { label: "닫기", type: "normal", role: "quit" },
-    // ]);
-    // tray.on("click", () => (mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()));
-    // tray.setContextMenu(contextMenu);
-    // mainWindow.on("close", (e) => {
-    //   if (mainWindow.isVisible()) {
-    //     mainWindow.hide();
-    //     e.preventDefault();
-    //   }
-    // });
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: '창 열기',
+        click() {
+          if (!mainWindow.isVisible()) {
+            mainWindow.show();
+          }
+        },
+      },
+      {
+        label: '가리기',
+        click() {
+          mainWindow.hide();
+        },
+      },
+      {
+        label: '프로그램 종료',
+        click() {
+          app.exit();
+        },
+      },
+    ]);
+
+    tray = new Tray(`${__dirname}/ETA_black.png`); // 아이콘 이미지 경로
+    tray.setContextMenu(contextMenu);
   }
 })();
 
