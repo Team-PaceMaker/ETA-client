@@ -4,8 +4,18 @@ import COLOR from 'constants/colors';
 import { getUserGraph } from 'apis/user';
 import { IFocusPoint } from 'types/user';
 
+const INITIAL_DATA = [
+  { date: new Date('2000-01-01'), attentionTime: 0 },
+  { date: new Date('2000-01-01'), attentionTime: 0 },
+  { date: new Date('2000-01-01'), attentionTime: 0 },
+  { date: new Date('2000-01-01'), attentionTime: 0 },
+  { date: new Date('2000-01-01'), attentionTime: 0 },
+  { date: new Date('2000-01-01'), attentionTime: 0 },
+  { date: new Date('2000-01-01'), attentionTime: 0 },
+];
+
 const LineChart = ({ type }: { type: string }) => {
-  const [focusStatistic, setFocusStatistic] = useState<IFocusPoint[]>([]);
+  const [focusStatistic, setFocusStatistic] = useState<IFocusPoint[]>(INITIAL_DATA);
 
   const handleGetGraph = (week: number) => {
     getUserGraph(week).then((res: IFocusPoint[]) => {
@@ -25,6 +35,7 @@ const LineChart = ({ type }: { type: string }) => {
 
   useEffect(() => {
     getUserGraph(1).then((res: IFocusPoint[]) => {
+      console.log(res);
       setFocusStatistic(
         res.map((data) => ({
           ...data,
