@@ -10,7 +10,7 @@ const GOOD_ATTENTION_TEXT = '오 잘하고 계신데요?';
 const BAD_ATTENTION_TEXT = '잠시 휴식을 취해볼까요?';
 const TIMER_DELAY = 1000;
 const CAPTURE_DELAY = 2000;
-const PUSH_ALARM_DELAY = 1800000;
+const PUSH_ALARM_DELAY = 30000;
 let scaleFactor = 0.25;
 
 const AttentionStatus = ({
@@ -60,7 +60,7 @@ const AttentionStatus = ({
 
   useInterval(() => {
     getPushAlarmStatus(attentionId).then((attentionStatus) => {
-      if (attentionStatus == 0) showNotification(attentionStatus);
+      showNotification(attentionStatus);
     });
   }, PUSH_ALARM_DELAY);
 
@@ -75,17 +75,23 @@ const AttentionStatus = ({
 
   return (
     <div className={styles.videoBodyContainer}>
-      <div style={FONT.HEADLINE1} className={styles.statusContainer}>
-        최근 집중 상태
+      <div style={{ display: 'flex', gap: 100 }}>
+        <video id='video-output' width={500} className={styles.video} />
+
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+          <div style={FONT.HEADLINE1} className={styles.statusContainer}>
+            최근 집중 상태
+          </div>
+          <div style={FONT.HEADLINE1} className={styles.attentionText}>
+            {getHour(timer)}:{getMinute(timer)}:{getSecond(timer)}
+          </div>
+          <div className={styles.attentionStatus}>{isAttention ? '😎' : '🫵'}</div>
+          <div style={FONT.BODY1} className={styles.attentionText}>
+            {isAttention ? GOOD_ATTENTION_TEXT : BAD_ATTENTION_TEXT}
+          </div>
+          <TextButton onClick={handleStopRecord}>STOP ETA</TextButton>
+        </div>
       </div>
-      <div style={FONT.HEADLINE1} className={styles.attentionText}>
-        {getHour(timer)}:{getMinute(timer)}:{getSecond(timer)}
-      </div>
-      <div className={styles.attentionStatus}>{isAttention ? '😎' : '🫵'}</div>
-      <div style={FONT.BODY1} className={styles.attentionText}>
-        {isAttention ? GOOD_ATTENTION_TEXT : BAD_ATTENTION_TEXT}
-      </div>
-      <TextButton onClick={handleStopRecord}>STOP ETA</TextButton>
     </div>
   );
 };
@@ -99,11 +105,11 @@ const getHour = (second: number) => {
 };
 
 const getMinute = (second: number) => {
+  const UNIT_HOUR = 60 * 60;
   const UNIT_MINUTE = 60;
-  const minute = Math.floor(second / UNIT_MINUTE)
+  return Math.floor((second % UNIT_HOUR) / UNIT_MINUTE)
     .toString()
     .padStart(2, '0');
-  return minute;
 };
 
 const getSecond = (second: number) => {
