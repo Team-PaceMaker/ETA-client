@@ -10,7 +10,7 @@ const GOOD_ATTENTION_TEXT = '오 잘하고 계신데요?';
 const BAD_ATTENTION_TEXT = '잠시 휴식을 취해볼까요?';
 const TIMER_DELAY = 1000;
 const CAPTURE_DELAY = 2000;
-const PUSH_ALARM_DELAY = 30000;
+const PUSH_ALARM_DELAY = 1800000;
 let scaleFactor = 0.25;
 
 const AttentionStatus = ({
@@ -60,7 +60,7 @@ const AttentionStatus = ({
 
   useInterval(() => {
     getPushAlarmStatus(attentionId).then((attentionStatus) => {
-      showNotification(attentionStatus);
+      if (attentionStatus == 0) showNotification(attentionStatus);
     });
   }, PUSH_ALARM_DELAY);
 
