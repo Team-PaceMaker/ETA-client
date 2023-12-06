@@ -6,12 +6,12 @@ import { IFocusPoint } from 'types/user';
 
 const INITIAL_DATA = [
   { date: new Date('2000-01-01'), attentionTime: 0 },
-  { date: new Date('2000-01-01'), attentionTime: 0 },
-  { date: new Date('2000-01-01'), attentionTime: 0 },
-  { date: new Date('2000-01-01'), attentionTime: 0 },
-  { date: new Date('2000-01-01'), attentionTime: 0 },
-  { date: new Date('2000-01-01'), attentionTime: 0 },
-  { date: new Date('2000-01-01'), attentionTime: 0 },
+  { date: new Date('2000-01-02'), attentionTime: 0 },
+  { date: new Date('2000-01-03'), attentionTime: 0 },
+  { date: new Date('2000-01-04'), attentionTime: 0 },
+  { date: new Date('2000-01-05'), attentionTime: 0 },
+  { date: new Date('2000-01-06'), attentionTime: 0 },
+  { date: new Date('2000-01-07'), attentionTime: 0 },
 ];
 
 const LineChart = ({ type }: { type: string }) => {
@@ -35,7 +35,6 @@ const LineChart = ({ type }: { type: string }) => {
 
   useEffect(() => {
     getUserGraph(1).then((res: IFocusPoint[]) => {
-      console.log(res);
       setFocusStatistic(
         res.map((data) => ({
           ...data,
@@ -81,7 +80,6 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
     .range([0, width]);
 
   const yMaxValue = Math.ceil(d3.max(focusStatistic, (d) => d.attentionTime) as number);
-  console.log('yMaxValue :', yMaxValue);
   const yScale = d3.scaleLinear().domain([0, yMaxValue]).range([height, 0]);
 
   // 선 생성

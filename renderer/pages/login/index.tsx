@@ -26,10 +26,16 @@ const LoginPage = () => {
   }, [authCode]);
   return (
     <div className={styles.loginContainer}>
-      <Image src='/images/logo.png' alt='ETA main logo' width={400} height={200} priority></Image>
+      <Image
+        src={'/ETA_image/logo.png'}
+        alt='ETA main logo'
+        width={400}
+        height={200}
+        priority
+      ></Image>
       <div className={styles.loginButton} onClick={handleGoogleLogin}>
         <Image
-          src='/images/kakao_login.png'
+          src={'/ETA_image/kakao_login.png'}
           alt='kakao login button'
           width={450}
           height={70}

@@ -16,7 +16,7 @@ const Header = () => {
   return (
     <div className={styles.headerContainer} style={FONT.BODY1}>
       <div className={styles.logo} onClick={() => router.push('/home')}>
-        <Image src='/images/logo.png' width={80} height={40}></Image>
+        <Image src={'/ETA_image/logo.png'} width={80} height={40}></Image>
       </div>
       {/* <div className={styles.login} onClick={() => router.push('/login')}>
         로그인

@@ -16,7 +16,6 @@ export const showNotification = (attentionStatus: number) => {
     }
   } else if (Notification.permission !== 'denied') {
     Notification.requestPermission((permission) => {
-      console.log(permission);
       if (permission === 'granted') {
         new Notification('START ETA', { body: '이제 푸시알림을 받을 수 있습니다.' });
       } else {

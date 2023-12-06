@@ -1,7 +1,10 @@
-import { app, Menu, Tray } from 'electron';
+import { app, Menu, Tray, systemPreferences, Notification } from 'electron';
 import serve from 'electron-serve';
+import path from 'path';
 import { config } from './config';
 import { createWindow } from './helpers';
+import fs from 'fs';
+import axios from 'axios';
 
 const isProd: boolean = process.env.NODE_ENV === 'production';
 
@@ -18,6 +21,8 @@ let tray = null;
     .whenReady()
     .then(() => {
       process.env.SERVER_URL = config.SERVER_URL;
+      // systemPreferences.askForMediaAccess('camera');
+      // systemPreferences.getMediaAccessStatus('camera');
     })
     .then(makeWindow);
 
@@ -79,8 +84,29 @@ let tray = null;
       },
     ]);
 
-    tray = new Tray(`${__dirname}/ETA_dark.png`);
-    tray.setContextMenu(contextMenu);
+    try {
+      tray = new Tray(`${__dirname}/ETA_dark.png`);
+      tray.setContextMenu(contextMenu);
+    } catch (err) {
+      axios({
+        method: 'GET',
+        url: 'https://etas3bucket.s3.ap-northeast-2.amazonaws.com/ETA_image/ETA_dark.png',
+        responseType: 'stream', // 스트림 형태로 받음
+      })
+        .then((response) => {
+          const imagePath = path.join(__dirname, 'ETA_dark.png'); // 저장할 경로
+          const imageStream = fs.createWriteStream(imagePath);
+          response.data.pipe(imageStream);
+
+          imageStream.on('finish', () => {
+            tray = new Tray(`${__dirname}/ETA_dark.png`);
+            tray.setContextMenu(contextMenu);
+          });
+        })
+        .catch((error) => {
+          throw Error('이미지 다운로드 실패:', error);
+        });
+    }
 
     // 다크모드 변경 감지
     // nativeTheme.on('updated', () => {
@@ -88,6 +114,16 @@ let tray = null;
     //   tray.setImage(`${__dirname}/ETA_${updatedSystemTheme}.png`);
     // });
   }
+  const notification = new Notification({
+    title: '현재 집중상태 : 🔥',
+    body: '열심히 하고계시네요! 아자아자!',
+  });
+
+  notification.show();
+
+  notification.on('click', () => {
+    console.log('Notification Clicked');
+  });
 })();
 
 app.setAsDefaultProtocolClient('eta');

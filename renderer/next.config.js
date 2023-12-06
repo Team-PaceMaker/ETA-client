@@ -1,7 +1,7 @@
 module.exports = {
   images: {
     loader: 'imgix',
-    path: 'http://localhost:8888',
+    path: 'https://etas3bucket.s3.ap-northeast-2.amazonaws.com',
   },
   webpack: (config, { isServer }) => {
     if (!isServer) {
