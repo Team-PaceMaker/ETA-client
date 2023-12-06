@@ -1,30 +1,68 @@
 import React, { useEffect, useState } from 'react';
 import * as d3 from 'd3';
 import COLOR from 'constants/colors';
+import { getUserGraph } from 'apis/user';
+import { IFocusPoint } from 'types/user';
+import styles from './LineChart.module.css';
 
-interface IFocusPoint {
-  date: Date;
-  value: number;
-}
-
-const DUMMY_DATA: IFocusPoint[] = [
-  { date: new Date('2023-11-11'), value: 0 },
-  { date: new Date('2023-11-12'), value: 5 },
-  { date: new Date('2023-11-13'), value: 3 },
-  { date: new Date('2023-11-14'), value: 4 },
-  { date: new Date('2023-11-15'), value: 8 },
-  { date: new Date('2023-11-16'), value: 6 },
-  { date: new Date('2023-11-17'), value: 3 },
+const INITIAL_DATA = [
+  { date: new Date('2000-01-01'), attentionTime: 0 },
+  { date: new Date('2000-01-02'), attentionTime: 0 },
+  { date: new Date('2000-01-03'), attentionTime: 0 },
+  { date: new Date('2000-01-04'), attentionTime: 0 },
+  { date: new Date('2000-01-05'), attentionTime: 0 },
+  { date: new Date('2000-01-06'), attentionTime: 0 },
+  { date: new Date('2000-01-07'), attentionTime: 0 },
 ];
 
-const LineChart = () => {
-  const [focusStatistic, setFocusStatistic] = useState<IFocusPoint[]>(DUMMY_DATA);
+const LineChart = ({ type }: { type: string }) => {
+  const [focusStatistic, setFocusStatistic] = useState<IFocusPoint[]>(INITIAL_DATA);
+
+  const handleGetGraph = (week: number) => {
+    getUserGraph(week).then((res: IFocusPoint[]) => {
+      setFocusStatistic(
+        res.map((data) => ({
+          ...data,
+          date: new Date(data.date),
+          attentionTime: getHour(data.attentionTime),
+        }))
+      );
+    });
+  };
 
   useEffect(() => {
-    drawChart(focusStatistic);
+    if (focusStatistic.length > 0) drawChart(focusStatistic);
   }, [focusStatistic]);
 
-  return <div id='line-container'></div>;
+  useEffect(() => {
+    getUserGraph(1).then((res: IFocusPoint[]) => {
+      setFocusStatistic(
+        res.map((data) => ({
+          ...data,
+          date: new Date(data.date),
+          attentionTime: getHour(data.attentionTime),
+        }))
+      );
+    });
+  }, []);
+
+  return (
+    <div id='line-container'>
+      {type === 'mypage' && (
+        <div className={styles.recentButtonContainer}>
+          <div className={styles.recentButton} onClick={() => handleGetGraph(1)}>
+            1주 전
+          </div>
+          <div className={styles.recentButton} onClick={() => handleGetGraph(2)}>
+            2주 전
+          </div>
+          <div className={styles.recentButton} onClick={() => handleGetGraph(3)}>
+            3주 전
+          </div>
+        </div>
+      )}
+    </div>
+  );
 };
 
 const drawChart = (focusStatistic: IFocusPoint[]) => {
@@ -48,16 +86,14 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
     .domain(d3.extent(focusStatistic, (d) => d.date) as [Date, Date])
     .range([0, width]);
 
-  const yScale = d3
-    .scaleLinear()
-    .domain([0, d3.max(focusStatistic, (d) => d.value) as number])
-    .range([height, 0]);
+  const yMaxValue = Math.ceil(d3.max(focusStatistic, (d) => d.attentionTime) as number);
+  const yScale = d3.scaleLinear().domain([0, yMaxValue]).range([height, 0]);
 
   // 선 생성
   const line = d3
     .line<IFocusPoint>()
     .x((d) => xScale(d.date) as number)
-    .y((d) => yScale(d.value) as number);
+    .y((d) => yScale(d.attentionTime) as number);
 
   function interpolateLine(d: IFocusPoint[]) {
     return function (t: number) {
@@ -91,6 +127,7 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
     .call(
       d3
         .axisLeft(yScale)
+        .ticks(yMaxValue)
         .tickFormat((d) => `${d}시간`)
         .tickPadding(10)
     )
@@ -116,7 +153,7 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
     .area<IFocusPoint>()
     .x((d) => xScale(d.date) as number)
     .y0(height)
-    .y1((d) => yScale(d.value) as number);
+    .y1((d) => yScale(d.attentionTime) as number);
 
   // 그림자 영역 추가
   svg
@@ -138,7 +175,7 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
     .enter()
     .append('circle')
     .attr('cx', (d) => xScale(d.date) as number)
-    .attr('cy', (d) => yScale(d.value) as number)
+    .attr('cy', (d) => yScale(d.attentionTime) as number)
     .attr('r', 5)
     .attr('fill', 'white')
     .on('mouseover', (event, d) => {
@@ -148,7 +185,7 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
       tooltip
         .append('rect')
         .attr('x', (xScale(d.date) as number) - 30)
-        .attr('y', (yScale(d.value) as number) - 40)
+        .attr('y', (yScale(d.attentionTime) as number) - 40)
         .attr('width', 60)
         .attr('height', 45)
         .attr('fill', 'white')
@@ -158,11 +195,11 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
       tooltip
         .append('text')
         .attr('x', xScale(d.date) as number)
-        .attr('y', (yScale(d.value) as number) - 10)
+        .attr('y', (yScale(d.attentionTime) as number) - 10)
         .attr('text-anchor', 'middle')
         .attr('font-size', 16)
         .attr('fill', 'black')
-        .text(`${d.value} ETA`);
+        .text(`${d.attentionTime} ETA`);
     })
 
     .on('mouseout', () => {
@@ -173,6 +210,12 @@ const drawChart = (focusStatistic: IFocusPoint[]) => {
     .duration(1000)
     .ease(d3.easeCubicOut)
     .style('opacity', 1);
+};
+
+const getHour = (second: number) => {
+  const UNIT_HOUR = 60 * 60;
+  const hour = second / UNIT_HOUR;
+  return Number(hour.toFixed(2));
 };
 
 export default LineChart;

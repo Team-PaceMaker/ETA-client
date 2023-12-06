@@ -98,6 +98,16 @@ const PieChart = () => {
           { label: '집중', value: 1 },
           { label: '산만', value: 1 },
         ]);
+      } else if (res.attentionCount === 0 && res.distractionCount !== 0) {
+        setResultCount([
+          { label: 'all-time', value: 0 },
+          { label: '산만', value: 1 },
+        ]);
+      } else if (res.attentionCount !== 0 && res.distractionCount === 0) {
+        setResultCount([
+          { label: '집중', value: 1 },
+          { label: 'all-time', value: 0 },
+        ]);
       } else {
         setResultCount([
           { label: '집중', value: res.attentionCount },

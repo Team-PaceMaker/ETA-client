@@ -1,7 +1,10 @@
-import { app, Menu, nativeImage, Tray, webContents } from 'electron';
+import { app, Menu, Tray, systemPreferences, Notification } from 'electron';
 import serve from 'electron-serve';
+import path from 'path';
 import { config } from './config';
 import { createWindow } from './helpers';
+import fs from 'fs';
+import axios from 'axios';
 
 const isProd: boolean = process.env.NODE_ENV === 'production';
 
@@ -11,29 +14,15 @@ if (isProd) {
   app.setPath('userData', `${app.getPath('userData')} (development)`);
 }
 
-(async () => {
-  // await app.whenReady().then(makeWindow).then(showNotification);
-  const dockMenu = Menu.buildFromTemplate([
-    {
-      label: 'New Window',
-      click() {
-        console.log('New Window');
-      },
-    },
-    {
-      label: 'New Window with Settings',
-      submenu: [{ label: 'Basic' }, { label: 'Pro' }],
-    },
-    { label: 'New Command...' },
-  ]);
+let tray = null;
 
+(async () => {
   await app
     .whenReady()
     .then(() => {
       process.env.SERVER_URL = config.SERVER_URL;
-      if (process.platform === 'darwin') {
-        app.dock.setMenu(dockMenu);
-      }
+      // systemPreferences.askForMediaAccess('camera');
+      // systemPreferences.getMediaAccessStatus('camera');
     })
     .then(makeWindow);
 
@@ -54,29 +43,87 @@ if (isProd) {
       mainWindow.webContents.openDevTools();
     }
 
-    // windows
-    // const iconPath = `${__dirname}/logo.png`;
-    // const tray = new Tray(nativeImage.createFromPath(iconPath));
-    // tray.setToolTip("ETA");
-    // const contextMenu = Menu.buildFromTemplate([
-    //   {
-    //     label: "열기",
-    //     type: "normal",
-    //     click() {
-    //       mainWindow.show();
-    //     },
-    //   },
-    //   { label: "닫기", type: "normal", role: "quit" },
-    // ]);
-    // tray.on("click", () => (mainWindow.isVisible() ? mainWindow.hide() : mainWindow.show()));
-    // tray.setContextMenu(contextMenu);
-    // mainWindow.on("close", (e) => {
-    //   if (mainWindow.isVisible()) {
-    //     mainWindow.hide();
-    //     e.preventDefault();
-    //   }
+    // 창 닫기 이벤트 설정
+    mainWindow.on('close', (event) => {
+      event.preventDefault();
+      mainWindow.hide();
+    });
+
+    // 메뉴에서 우클릭 종료 시 어플리케이션 종료
+    app.on('before-quit', () => {
+      app.exit();
+    });
+
+    app.on('activate', () => {
+      // 메뉴에서 아이콘 클릭 시 다시 창 띄우기
+      if (!mainWindow.isVisible()) {
+        mainWindow.show();
+      }
+    });
+
+    const contextMenu = Menu.buildFromTemplate([
+      {
+        label: '창 열기',
+        click() {
+          if (!mainWindow.isVisible()) {
+            mainWindow.show();
+          }
+        },
+      },
+      {
+        label: '가리기',
+        click() {
+          mainWindow.hide();
+        },
+      },
+      {
+        label: '프로그램 종료',
+        click() {
+          app.exit();
+        },
+      },
+    ]);
+
+    try {
+      tray = new Tray(`${__dirname}/ETA_dark.png`);
+      tray.setContextMenu(contextMenu);
+    } catch (err) {
+      axios({
+        method: 'GET',
+        url: 'https://etas3bucket.s3.ap-northeast-2.amazonaws.com/ETA_image/ETA_dark.png',
+        responseType: 'stream', // 스트림 형태로 받음
+      })
+        .then((response) => {
+          const imagePath = path.join(__dirname, 'ETA_dark.png'); // 저장할 경로
+          const imageStream = fs.createWriteStream(imagePath);
+          response.data.pipe(imageStream);
+
+          imageStream.on('finish', () => {
+            tray = new Tray(`${__dirname}/ETA_dark.png`);
+            tray.setContextMenu(contextMenu);
+          });
+        })
+        .catch((error) => {
+          throw Error('이미지 다운로드 실패:', error);
+        });
+    }
+
+    // 다크모드 변경 감지
+    // nativeTheme.on('updated', () => {
+    //   const updatedSystemTheme = nativeTheme.shouldUseDarkColors ? 'dark' : 'light';
+    //   tray.setImage(`${__dirname}/ETA_${updatedSystemTheme}.png`);
     // });
   }
+  const notification = new Notification({
+    title: '현재 집중상태 : 🔥',
+    body: '열심히 하고계시네요! 아자아자!',
+  });
+
+  notification.show();
+
+  notification.on('click', () => {
+    console.log('Notification Clicked');
+  });
 })();
 
 app.setAsDefaultProtocolClient('eta');

@@ -7,6 +7,10 @@ import {
 } from 'types/attention';
 import { defaultServer, formDataServer } from './settings';
 
+interface IFocusStatus {
+  prediction: number;
+}
+
 export const getAttentionStatus = async (formData: FormData) => {
   const result = await formDataServer.post<IGetAttentionStatus>(
     'api/v1/attention',
@@ -45,3 +49,13 @@ export const getStatisticCount = async (attentionId: number) => {
   );
   return result.data;
 };
+
+export const getPushAlarmStatus = async (attentionId: number) => {
+  const result = await defaultServer.get<IFocusStatus>(`api/v1/attention/recent/${attentionId}`);
+  return result.data.prediction;
+};
+
+// export const getRecentFocusStatus = async (attentionId: number) => {
+//   const result = await defaultServer.get<IFocusStatus>(`api/v1/attention/${attentionId}`);
+//   return result.data.prediction;
+// };
