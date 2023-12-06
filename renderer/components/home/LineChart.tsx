@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import COLOR from 'constants/colors';
 import { getUserGraph } from 'apis/user';
 import { IFocusPoint } from 'types/user';
+import styles from './LineChart.module.css';
 
 const INITIAL_DATA = [
   { date: new Date('2000-01-01'), attentionTime: 0 },
@@ -48,11 +49,17 @@ const LineChart = ({ type }: { type: string }) => {
   return (
     <div id='line-container'>
       {type === 'mypage' && (
-        <>
-          <button onClick={() => handleGetGraph(1)}>1주일전</button>
-          <button onClick={() => handleGetGraph(2)}>2주일전</button>
-          <button onClick={() => handleGetGraph(3)}>3주일전</button>
-        </>
+        <div className={styles.recentButtonContainer}>
+          <div className={styles.recentButton} onClick={() => handleGetGraph(1)}>
+            1주 전
+          </div>
+          <div className={styles.recentButton} onClick={() => handleGetGraph(2)}>
+            2주 전
+          </div>
+          <div className={styles.recentButton} onClick={() => handleGetGraph(3)}>
+            3주 전
+          </div>
+        </div>
       )}
     </div>
   );

@@ -19,7 +19,7 @@ const MyPage = () => {
     <RootLayout>
       <div className={styles.mypageHeader}>
         <div style={FONT.HEADLINE1}>{userInfo?.name} 님</div>
-        <div style={FONT.HEADLINE1}>최근 일주일간 집중 상태 그래프입니다.</div>
+        <div style={FONT.HEADLINE1}>최근 집중 상태 그래프입니다.</div>
       </div>
       <LineChart type='mypage' />
     </RootLayout>
