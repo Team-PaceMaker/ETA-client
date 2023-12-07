@@ -40,7 +40,7 @@ let tray = null;
     } else {
       const port = process.argv[2];
       await mainWindow.loadURL(`http://localhost:${port}/`);
-      mainWindow.webContents.openDevTools();
+      // mainWindow.webContents.openDevTools();
     }
 
     // 창 닫기 이벤트 설정
@@ -114,16 +114,16 @@ let tray = null;
     //   tray.setImage(`${__dirname}/ETA_${updatedSystemTheme}.png`);
     // });
   }
-  const notification = new Notification({
-    title: '현재 집중상태 : 🔥',
-    body: '열심히 하고계시네요! 아자아자!',
-  });
+  // const notification = new Notification({
+  //   title: '현재 집중상태 : 🔥',
+  //   body: '열심히 하고계시네요! 아자아자!',
+  // });
 
-  notification.show();
+  // notification.show();
 
-  notification.on('click', () => {
-    console.log('Notification Clicked');
-  });
+  // notification.on('click', () => {
+  //   console.log('Notification Clicked');
+  // });
 })();
 
 app.setAsDefaultProtocolClient('eta');

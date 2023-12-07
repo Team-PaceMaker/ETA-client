@@ -17,8 +17,8 @@ const ResultPage = () => {
 
   const getAttentionTimeSlots = () => {
     const slots = statisticResult?.attentionTimeSlots?.attentionSlots;
-    if (slots) return '없음';
-    return [slots].join(', '); // 11-12, 12-13
+    if (slots) return [slots].join(', ');
+    return '없음'; // 11-12, 12-13
   };
 
   useEffect(() => {
