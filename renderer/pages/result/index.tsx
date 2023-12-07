@@ -17,7 +17,7 @@ const ResultPage = () => {
 
   const getAttentionTimeSlots = () => {
     const slots = statisticResult?.attentionTimeSlots?.attentionSlots;
-    if (slots) return `${[slots].join(', ')} 시`;
+    if (Array.isArray(slots) && slots.length > 0) return `${[slots].join(', ')} 시`;
     return '없음';
   };
 
