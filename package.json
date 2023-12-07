@@ -8,13 +8,23 @@
   "scripts": {
     "dev": "nextron",
     "build": "nextron build",
+    "build:win64": "nextron build --win --x64",
+    "build:mac": "nextron build --mac --x64",
     "postinstall": "electron-builder install-app-deps"
   },
   "dependencies": {
+    "axios": "^1.5.1",
+    "classnames": "^2.3.2",
+    "d3": "^7.8.5",
+    "electron-oauth2": "^3.0.0",
     "electron-serve": "^1.1.0",
-    "electron-store": "^8.1.0"
+    "electron-store": "^8.1.0",
+    "recoil": "^0.7.7",
+    "uuid": "^9.0.1"
   },
   "devDependencies": {
+    "@types/classnames": "^2.3.1",
+    "@types/d3": "^7.4.0",
     "@types/node": "^18.11.18",
     "@types/react": "^18.0.26",
     "electron": "^21.3.3",

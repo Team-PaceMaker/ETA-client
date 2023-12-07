@@ -1,0 +1,54 @@
+.cameraBodyContainer {
+  /* height: 92vh; */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.video {
+  margin-top: 40px;
+  transform: rotateY(180deg);
+  -webkit-transform: rotateY(180deg); /* Safari and Chrome */
+  -moz-transform: rotateY(180deg); /* Firefox */
+}
+
+.none {
+  display: none;
+}
+
+.loadingBlock {
+  width: 600px;
+  height: 150px;
+}
+
+.videoText {
+  color: white;
+  padding: 20px;
+}
+
+.output {
+  display: block;
+  top: 4px;
+  position: relative;
+  border: dotted 1px #ccc;
+  /* padding: 2px; */
+}
+
+.buttonContainer {
+  background-color: var(--color-green);
+  display: inline-block;
+  padding: 15px;
+  border-radius: 100px;
+  font-weight: bold;
+  color: var(--color-black);
+  cursor: pointer;
+}
+
+.canvas {
+  position: absolute;
+  top: 13%;
+  left: 25%;
+  z-index: 1;
+  /* background-color: rgba(70, 40, 151, 0.5); */
+}

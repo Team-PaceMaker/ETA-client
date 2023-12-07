@@ -1,0 +1,7 @@
+.mypageHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding-right: 350px;
+  /* margin-bottom: 30px; */
+}

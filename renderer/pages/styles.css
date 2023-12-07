@@ -1,0 +1,11 @@
+:root {
+  --color-black: #424242;
+  --color-green: #69f176;
+  --color-white: #ffffff;
+  --color-lightblack: rgba(255, 255, 255, 0.2);
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-black);
+}

@@ -1,0 +1,31 @@
+.headerContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--color-white);
+  background-color: var(--color-lightblack);
+  padding: 0px 15px;
+  height: 7vh;
+}
+
+.logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo:hover {
+  cursor: pointer;
+}
+
+.login:hover {
+  cursor: pointer;
+}
+
+.logout:hover {
+  cursor: pointer;
+}
+
+.mypage:hover {
+  cursor: pointer;
+}
