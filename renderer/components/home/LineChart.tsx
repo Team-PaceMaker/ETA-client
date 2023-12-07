@@ -4,6 +4,7 @@ import COLOR from 'constants/colors';
 import { getUserGraph } from 'apis/user';
 import { IFocusPoint } from 'types/user';
 import styles from './LineChart.module.css';
+import classNames from 'classnames';
 
 const INITIAL_DATA = [
   { date: new Date('2000-01-01'), attentionTime: 0 },
@@ -17,6 +18,29 @@ const INITIAL_DATA = [
 
 const LineChart = ({ type }: { type: string }) => {
   const [focusStatistic, setFocusStatistic] = useState<IFocusPoint[]>(INITIAL_DATA);
+  const [clickedButton, setClickedButton] = useState([
+    {
+      id: 1,
+      clicked: true,
+    },
+    {
+      id: 2,
+      clicked: false,
+    },
+    {
+      id: 3,
+      clicked: false,
+    },
+  ]);
+
+  const handleClickBtn = (id: number) => {
+    setClickedButton(
+      clickedButton.map((button) =>
+        button.id === id ? { ...button, clicked: true } : { ...button, clicked: false }
+      )
+    );
+    handleGetGraph(id);
+  };
 
   const handleGetGraph = (week: number) => {
     getUserGraph(week).then((res: IFocusPoint[]) => {
@@ -50,15 +74,17 @@ const LineChart = ({ type }: { type: string }) => {
     <div id='line-container'>
       {type === 'mypage' && (
         <div className={styles.recentButtonContainer}>
-          <div className={styles.recentButton} onClick={() => handleGetGraph(1)}>
-            1주 전
-          </div>
-          <div className={styles.recentButton} onClick={() => handleGetGraph(2)}>
-            2주 전
-          </div>
-          <div className={styles.recentButton} onClick={() => handleGetGraph(3)}>
-            3주 전
-          </div>
+          {clickedButton.map((button) => (
+            <div
+              className={classNames(
+                styles.recentButton,
+                button.clicked ? styles.clickedButton : styles.recentButton
+              )}
+              onClick={() => handleClickBtn(button.id)}
+            >
+              {button.id}주 전
+            </div>
+          ))}
         </div>
       )}
     </div>

@@ -15,7 +15,12 @@
   padding: 10px;
   width: 50px;
 
+  font-weight: bold;
   background-color: rgba(185, 247, 196, 0.4);
   color: white;
   cursor: pointer;
+}
+
+.clickedButton {
+  background-color: var(--color-green);
 }
