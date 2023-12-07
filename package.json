@@ -19,6 +19,7 @@
     "electron-oauth2": "^3.0.0",
     "electron-serve": "^1.1.0",
     "electron-store": "^8.1.0",
+    "react-spinners": "^0.13.8",
     "recoil": "^0.7.7",
     "uuid": "^9.0.1"
   },

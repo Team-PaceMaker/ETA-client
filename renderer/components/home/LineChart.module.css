@@ -24,3 +24,9 @@
 .clickedButton {
   background-color: var(--color-green);
 }
+
+.loading {
+  display: flex;
+  align-items: center;
+  height: 455px;
+}

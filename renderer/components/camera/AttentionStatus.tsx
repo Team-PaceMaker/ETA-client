@@ -77,6 +77,7 @@ const AttentionStatus = ({
 
   useInterval(() => {
     getPushAlarmStatus(attentionId).then((attentionStatus) => {
+      console.log('getPushAlarmStatus : ', attentionStatus);
       showNotification(attentionStatus);
     });
   }, PUSH_ALARM_DELAY);

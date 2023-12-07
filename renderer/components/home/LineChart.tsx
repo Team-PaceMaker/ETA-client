@@ -5,19 +5,11 @@ import { getUserGraph } from 'apis/user';
 import { IFocusPoint } from 'types/user';
 import styles from './LineChart.module.css';
 import classNames from 'classnames';
-
-const INITIAL_DATA = [
-  { date: new Date('2000-01-01'), attentionTime: 0 },
-  { date: new Date('2000-01-02'), attentionTime: 0 },
-  { date: new Date('2000-01-03'), attentionTime: 0 },
-  { date: new Date('2000-01-04'), attentionTime: 0 },
-  { date: new Date('2000-01-05'), attentionTime: 0 },
-  { date: new Date('2000-01-06'), attentionTime: 0 },
-  { date: new Date('2000-01-07'), attentionTime: 0 },
-];
+import Loading from './Loading';
 
 const LineChart = ({ type }: { type: string }) => {
-  const [focusStatistic, setFocusStatistic] = useState<IFocusPoint[]>(INITIAL_DATA);
+  const [focusStatistic, setFocusStatistic] = useState<IFocusPoint[]>([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [clickedButton, setClickedButton] = useState([
     {
       id: 1,
@@ -55,7 +47,7 @@ const LineChart = ({ type }: { type: string }) => {
   };
 
   useEffect(() => {
-    if (focusStatistic.length > 0) drawChart(focusStatistic);
+    drawChart(focusStatistic);
   }, [focusStatistic]);
 
   useEffect(() => {
@@ -67,27 +59,36 @@ const LineChart = ({ type }: { type: string }) => {
           attentionTime: getHour(data.attentionTime),
         }))
       );
+      setIsLoading(true);
     });
+    return () => setIsLoading(false);
   }, []);
 
   return (
-    <div id='line-container'>
-      {type === 'mypage' && (
-        <div className={styles.recentButtonContainer}>
-          {clickedButton.map((button) => (
-            <div
-              className={classNames(
-                styles.recentButton,
-                button.clicked ? styles.clickedButton : styles.recentButton
-              )}
-              onClick={() => handleClickBtn(button.id)}
-            >
-              {button.id}주 전
+    <>
+      {isLoading ? (
+        <div id='line-container'>
+          {type === 'mypage' && (
+            <div className={styles.recentButtonContainer}>
+              {clickedButton.map((button) => (
+                <div
+                  key={button.id}
+                  className={classNames(
+                    styles.recentButton,
+                    button.clicked ? styles.clickedButton : styles.recentButton
+                  )}
+                  onClick={() => handleClickBtn(button.id)}
+                >
+                  {button.id}주 전
+                </div>
+              ))}
             </div>
-          ))}
+          )}
         </div>
+      ) : (
+        <Loading />
       )}
-    </div>
+    </>
   );
 };
 
