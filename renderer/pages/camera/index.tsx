@@ -63,16 +63,19 @@ const CameraPage = () => {
   }, []);
 
   return (
-    <RootLayout>
-      {isStartRecord && (
+    <>
+      {isStartRecord ? (
         <AttentionStatus attentionId={attentionId} handleStopRecord={handleStopRecord} />
+      ) : (
+        <RootLayout>
+          <CameraGuide
+            isVideoLoaded={isVideoLoaded}
+            isStartRecord={isStartRecord}
+            handleStartRecord={handleStartRecord}
+          />
+        </RootLayout>
       )}
-      <CameraGuide
-        isVideoLoaded={isVideoLoaded}
-        isStartRecord={isStartRecord}
-        handleStartRecord={handleStartRecord}
-      />
-    </RootLayout>
+    </>
   );
 };
 

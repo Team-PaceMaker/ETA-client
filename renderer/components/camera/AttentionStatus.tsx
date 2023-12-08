@@ -75,12 +75,12 @@ const AttentionStatus = ({
     });
   };
 
-  useInterval(() => {
-    getPushAlarmStatus(attentionId).then((attentionStatus) => {
-      console.log('getPushAlarmStatus : ', attentionStatus);
-      showNotification(attentionStatus);
-    });
-  }, PUSH_ALARM_DELAY);
+  // useInterval(() => {
+  //   getPushAlarmStatus(attentionId).then((attentionStatus) => {
+  //     console.log('getPushAlarmStatus : ', attentionStatus);
+  //     showNotification(attentionStatus);
+  //   });
+  // }, PUSH_ALARM_DELAY);
 
   // 일정간격마다 비디오 캡처
   useInterval(() => {
@@ -96,6 +96,47 @@ const AttentionStatus = ({
       showCameraGuide();
     }
   }, []);
+
+  const handlePushAlarm = () => {
+    getPushAlarmStatus(attentionId).then((attentionStatus) => {
+      console.log('getPushAlarmStatus : ', attentionStatus);
+      // showNotification(attentionStatus);
+      if (Notification.permission === 'granted') {
+        if (attentionStatus) {
+          // TODO: 집중상태를 값으로 받아서 값에 따라 푸시알림 보내기
+          const notificationTitle = '현재 집중상태 : 🔥';
+          new Notification(notificationTitle, {
+            body: '열심히 하고계시네요! 아자아자!',
+          }).onclick = () => console.log('Notification Clicked');
+        } else {
+          const notificationTitle = '현재 집중상태 : 🫵';
+          new Notification(notificationTitle, {
+            body: '바람한번 쐬고오는 건 어떨까요?',
+          }).onclick = () => console.log('Notification Clicked');
+        }
+      } else if (Notification.permission !== 'denied') {
+        Notification.requestPermission().then((permission) => {
+          if (permission === 'granted') {
+            const notificationTitle = '현재 집중상태 : 🔥';
+            new Notification(notificationTitle, {
+              body: '열심히 하고계시네요! 아자아자!',
+            });
+          }
+        });
+      }
+    });
+  };
+
+  const handleClickPush = () => {
+    const hiddenBtn = document.getElementById('hiddenBtn') as HTMLButtonElement;
+    if (hiddenBtn) {
+      hiddenBtn.click();
+    }
+  };
+
+  useInterval(() => {
+    handleClickPush();
+  }, PUSH_ALARM_DELAY);
 
   return (
     <div className={styles.videoBodyContainer}>
@@ -114,6 +155,7 @@ const AttentionStatus = ({
             {isAttention ? GOOD_ATTENTION_TEXT : BAD_ATTENTION_TEXT}
           </div>
           <TextButton onClick={handleStopRecord}>STOP ETA</TextButton>
+          <button id='hiddenBtn' className={styles.hiddenBtn} onClick={handlePushAlarm}></button>
         </div>
       </div>
     </div>

@@ -114,16 +114,16 @@ let tray = null;
     //   tray.setImage(`${__dirname}/ETA_${updatedSystemTheme}.png`);
     // });
   }
-  // const notification = new Notification({
-  //   title: '현재 집중상태 : 🔥',
-  //   body: '열심히 하고계시네요! 아자아자!',
-  // });
+  const notification = new Notification({
+    title: 'ETA(Estimated Time for Attention)',
+    body: '오늘도 화이팅!',
+  });
 
-  // notification.show();
+  notification.show();
 
-  // notification.on('click', () => {
-  //   console.log('Notification Clicked');
-  // });
+  notification.on('click', () => {
+    console.log('Notification Clicked');
+  });
 })();
 
 app.setAsDefaultProtocolClient('eta');
