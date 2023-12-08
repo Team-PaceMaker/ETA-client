@@ -140,10 +140,9 @@ const AttentionStatus = ({
 
   return (
     <div className={styles.videoBodyContainer}>
-      <div style={{ display: 'flex', gap: 100 }}>
+      <div className={styles.videoSection}>
         <video id='video-output-2' width={500} className={styles.video} />
-
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 }}>
+        <div className={styles.videoFocusContainer}>
           <div style={FONT.HEADLINE1} className={styles.statusContainer}>
             최근 집중 상태
           </div>
