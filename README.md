@@ -6,11 +6,12 @@
 
 ```bash
 git clone https://github.com/Team-PaceMaker/ETA-client.git
+cd ETA-client
 npm install
 npm run dev
 ```
 
 # 시연영상
 
-https://github.com/Team-PaceMaker/ETA-client/assets/63959171/afd57ef3-cb13-4942-816b-bf2aa2e97b29
+https://github.com/Team-PaceMaker/ETA-client/assets/63959171/0564ae93-304f-4b9c-88ca-22306a563068
 
