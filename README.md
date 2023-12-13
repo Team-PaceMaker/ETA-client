@@ -11,6 +11,8 @@ npm install
 npm run dev
 ```
 
+> secret key를 별도로 관리하기 때문에 실행을 위해선 config.js 파일 필요함
+
 # 시연영상
 
 https://github.com/Team-PaceMaker/ETA-client/assets/63959171/0564ae93-304f-4b9c-88ca-22306a563068
